@@ -2,7 +2,6 @@ package com.example.daniel.proyectomoviles
 
 
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.maps.android.SphericalUtil
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.support.v4.uiThread
 import java.net.URL
@@ -79,10 +80,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         limpiarMapa()
 
         if(posicion!=null){
-            //marcadorDestino.remove()
+
             coordenadasDestino.clear()
             marcadorDestino = mMap.addMarker(MarkerOptions().position(posicion))
-          //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion,mMap.cameraPosition.zoom))
+
 
             coordenadasDestino.add(posicion.latitude.toString())
             coordenadasDestino.add(posicion.longitude.toString())
@@ -99,15 +100,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun dibujarRuta() {
 
-
-
         //Creacion de un objeto polyLine options
 
         val options = PolylineOptions()
         options.color(R.color.colorRuta)
         options.width(8f)
-
-
 
         //este metodo nos permite construir la URL que usaremos para hacer la llamada a la API diretions
         val url= construirURL()
@@ -163,6 +160,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 //Centramos la ruta en la pantalla usando nuestro bounds construido
                 mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,100))
 
+                //Calculamos distancia entre los dos puntos
+                calcularDistancia(coordenadasOrigen,coordenadasDestino)
+
             }
         }
 
@@ -214,7 +214,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         //Usaremos las coordenadas origen y destino
 
-
         //Empezamos a contruir nuestra URL:
         //Construirmos el siguiente string: origin=latitud,longitud
         val origen = "origin="+coordenadasOrigen[0]+","+coordenadasOrigen[1]
@@ -224,8 +223,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         //Reornamos la url construida
         return "https://maps.googleapis.com/maps/api/directions/json?$parametros"
-
-
 
     }
 
@@ -255,6 +252,37 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
+    private fun calcularDistancia(coordenadasOrigen: ArrayList<String>, coordenadasDestino: ArrayList<String>){
+
+        val origen = LatLng(coordenadasOrigen[0].toDouble(), coordenadasOrigen[1].toDouble())
+        val destino = LatLng(coordenadasDestino[0].toDouble(), coordenadasDestino[1].toDouble())
+
+        val distancia = SphericalUtil.computeDistanceBetween(origen,destino)
+
+        val distanciaString = formatNumber(distancia)
+
+        val toast = Toast.makeText(this.requireContext(), "LA DISTANCIA ES: "+distanciaString, Toast.LENGTH_SHORT)
+        toast.show()
+
+
+    }
+
+    private fun formatNumber(distance: Double): String {
+        var distance = distance
+        var unit = "m"
+        if (distance < 1) {
+            distance *= 1000.0
+            unit = "mm"
+        } else if (distance > 1000) {
+            distance /= 1000.0
+            unit = "km"
+        }
+
+        return String.format("%4.3f%s", distance, unit)
+    }
+
+
 
 
 }
