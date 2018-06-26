@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.SphericalUtil
+import kotlinx.android.synthetic.*
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.support.v4.uiThread
 import java.net.URL
@@ -36,6 +38,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
     private lateinit var mMap: GoogleMap
+    private lateinit var busqueda:EditText
 
     lateinit var marcadorOrigen: Marker
     lateinit var marcadorDestino: Marker
@@ -53,6 +56,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
@@ -262,8 +267,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val distanciaString = formatNumber(distancia)
 
-        val toast = Toast.makeText(this.requireContext(), "LA DISTANCIA ES: "+distanciaString, Toast.LENGTH_SHORT)
-        toast.show()
+       // val toast = Toast.makeText(this.requireContext(), "LA DISTANCIA ES: "+distanciaString, Toast.LENGTH_SHORT)
+       // toast.show()
 
 
     }
