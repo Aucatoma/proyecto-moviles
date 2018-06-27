@@ -1,16 +1,23 @@
 package com.example.daniel.proyectomoviles
 
 
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
@@ -24,8 +31,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.fragment_map.*
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.support.v4.uiThread
+import java.io.IOException
 import java.net.URL
 
 
@@ -46,17 +55,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val coordenadasOrigen = ArrayList<String>()
     val coordenadasDestino = ArrayList<String>()
 
+    //Informacion de la direccion actual de usuario
+    var provincia:String =""
+    var ciudad:String=""
+    var pais:String=""
+
+
 
     val ZOOM_LEVEL = 17f
 
     //Declaramos un objeto bounds para que toda la ruta que se dibuje quepa en la pantalla
     val LatLongB = LatLngBounds.Builder()
 
+    lateinit var inputMethodManager : InputMethodManager
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        
+
+
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
@@ -64,6 +82,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        busqueda = view.findViewById(R.id.texto_busqueda) as EditText
+        inputMethodManager = this.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         val mapFragment: SupportMapFragment? = childFragmentManager.findFragmentById(R.id.map1) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -76,7 +98,46 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         //Cada vez que agregue un marcador tambien vamos a dibujar la ruta
         mMap.setOnMapClickListener { latLng: LatLng? ->
-            aniadirMarcador(latLng)
+            //aniadirMarcador(latLng)
+        }
+
+        btn_buscar_direccion.setOnClickListener { view: View? ->
+
+            //Se usa para que al momento de que haga click en el boton, el teclado se esconda
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
+
+            buscarLocacion()
+        }
+    }
+
+
+
+    private fun buscarLocacion() {
+        val textoBusqueda = busqueda.text.toString()
+
+        val localizador = Geocoder(requireContext())
+
+        var direcciones : List<Address>
+        direcciones = ArrayList()
+
+        try {
+
+            //Se añaden datos extras a la busqueda para que sea mas precisa
+            direcciones = localizador.getFromLocationName("$textoBusqueda, $ciudad, $pais, $provincia", 1)
+            Log.i("Search","El usuario busco esto: "+textoBusqueda)
+
+        }catch (e:IOException){
+            Log.i("Search","Error: "+e.message)
+        }
+        if(direcciones.isNotEmpty()){
+
+            var direccionEncontrada = direcciones[0]
+            Log.i("Search","Se encontro direccion!: "+direccionEncontrada.toString())
+
+            aniadirMarcador(LatLng(direccionEncontrada.latitude,direccionEncontrada.longitude))
+
+        }else{
+            Log.i("Search","No se hallo nada")
         }
     }
 
@@ -87,7 +148,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if(posicion!=null){
 
             coordenadasDestino.clear()
-            marcadorDestino = mMap.addMarker(MarkerOptions().position(posicion))
+            marcadorDestino = mMap.addMarker(MarkerOptions()
+                    .position(posicion)
+                    .title("Su Destino")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)))
+            marcadorDestino.showInfoWindow()
 
 
             coordenadasDestino.add(posicion.latitude.toString())
@@ -241,17 +306,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 if(location!=null){
                     val posicionDelUsuario = LatLng(location.latitude, location.longitude)
+
                     marcadorOrigen = mMap.addMarker(MarkerOptions().position(posicionDelUsuario).title("Usted esta aquí"))
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posicionDelUsuario,ZOOM_LEVEL))
                     marcadorOrigen.showInfoWindow()
 
                     marcadorDestino = mMap.addMarker(MarkerOptions().position(posicionDelUsuario))
 
+                    //Se inicializa tanto origen como destino con la posicion inicial del usuario
+
                     coordenadasDestino.add(location.latitude.toString())
                     coordenadasDestino.add(location.longitude.toString())
 
                     coordenadasOrigen.add(location.latitude.toString())
                     coordenadasOrigen.add(location.longitude.toString())
+
+                    val localizador = Geocoder(requireContext())
+
+
+                    //Se toman los datos de la direccion del usuario, necesarios para realizar una busqueda mas precisa de su destino
+                    var direccionUsuario:List<Address>
+                    direccionUsuario = ArrayList()
+                    direccionUsuario = localizador.getFromLocation(coordenadasOrigen[0].toDouble(), coordenadasOrigen[1].toDouble(),1)
+                    ciudad=direccionUsuario[0].locality.toString()
+                    //codigoPostal=direccionUsuario[0].postalCode.toString()
+                    pais=direccionUsuario[0].countryName
+                    provincia=direccionUsuario[0].adminArea
                 }
 
             }
