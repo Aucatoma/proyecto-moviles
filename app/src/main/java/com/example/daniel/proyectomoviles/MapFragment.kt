@@ -2,6 +2,7 @@ package com.example.daniel.proyectomoviles
 
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -34,6 +35,7 @@ import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.support.v4.uiThread
+import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.net.URL
 
@@ -60,6 +62,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var ciudad:String=""
     var pais:String=""
 
+    val verificadorIntenet = VerificadorInternet()
+
+
 
 
     val ZOOM_LEVEL = 17f
@@ -73,8 +78,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
@@ -96,17 +99,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         establecerPosicionUsuario()
 
-        //Cada vez que agregue un marcador tambien vamos a dibujar la ruta
-        mMap.setOnMapClickListener { latLng: LatLng? ->
-            //aniadirMarcador(latLng)
-        }
-
         btn_buscar_direccion.setOnClickListener { view: View? ->
 
             //Se usa para que al momento de que haga click en el boton, el teclado se esconda
-            inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
+            async {
+                val hayConexion= verificadorIntenet.hasActiveInternetConnection(requireContext())
 
-            buscarLocacion()
+                uiThread {
+
+                    if(hayConexion){
+
+                        inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
+                        buscarLocacion()
+
+                    }else{
+                        val toast = Toast.makeText(requireContext(), "No tiene conexión a internet", Toast.LENGTH_SHORT)
+                        toast.show()
+                    }
+
+                }
+            }
+
         }
     }
 
