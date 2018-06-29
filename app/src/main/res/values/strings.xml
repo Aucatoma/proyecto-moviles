@@ -6,9 +6,47 @@
     <string name="nav_header_title">Daniel Aucatoma</string>
     <string name="nav_header_subtitle">daucatoma1996@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="action_settings">Configuraciones</string>
+    <string name="title_activity_maps">Mapa</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Strings inicio sesion y registro-->
+
+    <string name="btn_iniciar_sesion">Iniciar Sesión</string>
+    <string name="btn_registrarse">Registrarse</string>
+
+
+    <!--Strings de lateral panel-->
+    <string name="opcion_mapa">Mapa</string>
+
+
+
+    <!--Strings interfaz mapa-->
+    <string name="donde_desea_ir">  ¿Dónde desea ir?</string>
+    <string name="btn_buscar">Buscar</string>
+    <string name="btn_solicitar_taxu">Solicitar taxi</string>
+    <string name="marcador_orgien">Usted está aquí</string>
+    <string name="marcador_destino">Su destino</string>
+
+
+    <!--String AlertDialog Cnfirmacion carrera-->
+    <string name="cabecera_dialog">Confirmación</string>
+    <string name="txt_origen">Origen: </string>
+    <string name="txt_destino">Destino: </string>
+    <string name="txt_distancia">Distancia: </string>
+    <string name="valor_a_pagar">Valor a pagar</string>
+    <string name="btn_cancelar_carrera">Cancelar</string>
+    <string name="btn_aceptar_carrera">Confirmar</string>
+
+
+    <!--Strings sobre conexion a internet-->
+    <string name="conexion_internet">No tiene conexión a internet</string>
+
+
+
+
+
+
 </resources>

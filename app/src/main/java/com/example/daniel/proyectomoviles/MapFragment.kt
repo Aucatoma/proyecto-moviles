@@ -2,7 +2,6 @@ package com.example.daniel.proyectomoviles
 
 
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -11,15 +10,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
@@ -31,10 +29,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.SphericalUtil
-import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.alert_dialog_solicitar_taxi.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.jetbrains.anko.custom.async
-import org.jetbrains.anko.support.v4.uiThread
 import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.net.URL
@@ -54,18 +51,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     lateinit var marcadorOrigen: Marker
     lateinit var marcadorDestino: Marker
 
+    //---------DATOS QUE SE ALMCACENAN EN LA ABASE--------//
+
     val coordenadasOrigen = ArrayList<String>()
     val coordenadasDestino = ArrayList<String>()
+    var distancia = 0.0
+    val valorRecorrido = 0.0
+
+    //-----------------------------------------------------//
+
+
+    var distanciaString = ""
+    var direccionOrigen= ""
+    var direccioDestino=""
 
     //Informacion de la direccion actual de usuario
     var provincia:String =""
     var ciudad:String=""
     var pais:String=""
+    var featureName:String=""
 
     val verificadorIntenet = VerificadorInternet()
-
-
-
 
     val ZOOM_LEVEL = 17f
 
@@ -73,7 +79,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val LatLongB = LatLngBounds.Builder()
 
     lateinit var inputMethodManager : InputMethodManager
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -113,7 +118,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         buscarLocacion()
 
                     }else{
-                        val toast = Toast.makeText(requireContext(), "No tiene conexión a internet", Toast.LENGTH_SHORT)
+                        val toast = Toast.makeText(requireContext(), R.string.conexion_internet, Toast.LENGTH_SHORT)
                         toast.show()
                     }
 
@@ -121,8 +126,44 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
 
         }
+
+        btn_solicitar_taxi.setOnClickListener { view: View? ->
+
+            val materialDialog = MaterialDialog.Builder(requireContext())
+                    .title(R.string.cabecera_dialog)
+                    .customView(R.layout.alert_dialog_solicitar_taxi,true)
+                    .positiveText(R.string.btn_aceptar_carrera)
+                    .negativeText(R.string.btn_cancelar_carrera)
+                    .show()
+
+            if(materialDialog!=null){
+
+                val view = materialDialog.customView
+
+                llenarAlertDialog(view)
+
+            }
+
+
+        }
+
     }
 
+    private fun llenarAlertDialog(view: View?) {
+
+        if(view!=null){
+
+            var campoOrigen:TextView = view.findViewById(R.id.txt_origen_input)
+            var campoDestino:TextView = view.findViewById(R.id.txt_destino_input)
+            var campoDistancia:TextView = view.findViewById(R.id.txt_distancia_input)
+
+            campoOrigen.text=direccionOrigen
+            campoDestino.text=direccioDestino
+            campoDistancia.text=distanciaString
+
+        }
+
+    }
 
 
     private fun buscarLocacion() {
@@ -148,6 +189,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.i("Search","Se encontro direccion!: "+direccionEncontrada.toString())
 
             aniadirMarcador(LatLng(direccionEncontrada.latitude,direccionEncontrada.longitude))
+            direccioDestino = "$textoBusqueda, $ciudad"
 
         }else{
             Log.i("Search","No se hallo nada")
@@ -163,7 +205,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             coordenadasDestino.clear()
             marcadorDestino = mMap.addMarker(MarkerOptions()
                     .position(posicion)
-                    .title("Su Destino")
+                    .title(requireContext().getString(R.string.marcador_destino))
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)))
             marcadorDestino.showInfoWindow()
 
@@ -320,7 +362,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 if(location!=null){
                     val posicionDelUsuario = LatLng(location.latitude, location.longitude)
 
-                    marcadorOrigen = mMap.addMarker(MarkerOptions().position(posicionDelUsuario).title("Usted esta aquí"))
+                    marcadorOrigen = mMap.addMarker(MarkerOptions().position(posicionDelUsuario).title(requireContext().getString(R.string.marcador_orgien)))
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posicionDelUsuario,ZOOM_LEVEL))
                     marcadorOrigen.showInfoWindow()
 
@@ -341,10 +383,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     var direccionUsuario:List<Address>
                     direccionUsuario = ArrayList()
                     direccionUsuario = localizador.getFromLocation(coordenadasOrigen[0].toDouble(), coordenadasOrigen[1].toDouble(),1)
+
+                    featureName=direccionUsuario[0].featureName
                     ciudad=direccionUsuario[0].locality.toString()
-                    //codigoPostal=direccionUsuario[0].postalCode.toString()
                     pais=direccionUsuario[0].countryName
                     provincia=direccionUsuario[0].adminArea
+
+                    direccionOrigen = "$featureName, $ciudad"
+
+
                 }
 
             }
@@ -356,13 +403,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val origen = LatLng(coordenadasOrigen[0].toDouble(), coordenadasOrigen[1].toDouble())
         val destino = LatLng(coordenadasDestino[0].toDouble(), coordenadasDestino[1].toDouble())
 
-        val distancia = SphericalUtil.computeDistanceBetween(origen,destino)
+        distancia = SphericalUtil.computeDistanceBetween(origen,destino)
 
-        val distanciaString = formatNumber(distancia)
-
-       // val toast = Toast.makeText(this.requireContext(), "LA DISTANCIA ES: "+distanciaString, Toast.LENGTH_SHORT)
-       // toast.show()
-
+        distanciaString = formatNumber(distancia)
 
     }
 

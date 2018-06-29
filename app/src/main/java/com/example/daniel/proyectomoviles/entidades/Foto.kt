@@ -12,6 +12,8 @@ class Foto (val id:Int,
             parcel.readInt(),
             parcel.readString(),
             parcel.readString()) {
+
+
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

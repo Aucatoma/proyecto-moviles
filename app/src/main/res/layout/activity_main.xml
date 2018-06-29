@@ -42,7 +42,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="42dp"
-            android:text="Iniciar sesión" />
+            android:text="@string/btn_iniciar_sesion" />
 
         <Button
             android:id="@+id/btn_registrar"
@@ -51,7 +51,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="45dp"
-            android:text="Registrarse" />
+            android:text="@string/btn_registrarse" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
