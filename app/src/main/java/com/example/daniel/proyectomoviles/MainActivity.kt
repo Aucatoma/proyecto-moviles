@@ -20,8 +20,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btn_iniciar_sesion.setOnClickListener { view: View? ->
-            irAActividadMapa()
+            launchLoginActivity()
+            //irAActividadMapa()
         }
+    }
+
+    private fun launchLoginActivity(){
+        val intent = Intent(this, LoginActivity:: class.java)
+        startActivity(intent)
     }
 
     private fun irAActividadMapa() {
