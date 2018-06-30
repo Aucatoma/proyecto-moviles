@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -43,7 +44,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     // implementation 'com.google.android.gms:play-services-location:15.0.1'
     //Para mas informacion ir a: https://developer.android.com/trainning/location/retrieve-current
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
 
     private lateinit var mMap: GoogleMap
     private lateinit var busqueda:EditText
@@ -91,18 +91,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         busqueda = view.findViewById(R.id.texto_busqueda) as EditText
         inputMethodManager = this.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         val mapFragment: SupportMapFragment? = childFragmentManager.findFragmentById(R.id.map1) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
         establecerPosicionUsuario()
+
 
         btn_buscar_direccion.setOnClickListener { view: View? ->
 

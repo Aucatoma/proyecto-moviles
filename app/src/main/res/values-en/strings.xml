@@ -50,5 +50,14 @@
     <string name="login_password">Password</string>
     <string name="login_sign_in">Sign In</string>
 
+    <!-- String para registro -->
+    <string name="sign_up_name">First name</string>
+    <string name="sign_up_last_name">Last name</string>
+    <string name="sign_up_mobile">Mobile</string>
+    <string name="sign_up_username">@string/login_username</string>
+    <string name="sign_up_password">@string/login_password</string>
+    <string name="sign_up_email">E-mail</string>
+    <string name="sign_up_btn">Sign Up</string>
+
 
 </resources>

@@ -22,7 +22,6 @@
     <string name="opcion_mapa">Mapa</string>
 
 
-
     <!--Strings interfaz mapa-->
     <string name="donde_desea_ir">  ¿Dónde desea ir?</string>
     <string name="btn_buscar">Buscar</string>
@@ -50,5 +49,13 @@
     <string name="login_password">Contraseña</string>
     <string name="login_sign_in">Entrar</string>
 
+    <!-- String para registro -->
+    <string name="sign_up_name">Nombre</string>
+    <string name="sign_up_last_name">Apellido</string>
+    <string name="sign_up_mobile">Celular</string>
+    <string name="sign_up_username">@string/login_username</string>
+    <string name="sign_up_password">@string/login_password</string>
+    <string name="sign_up_email">Correo electrónico</string>
+    <string name="sign_up_btn">Registrarse</string>
 
 </resources>

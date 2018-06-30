@@ -1,5 +1,6 @@
 package com.example.daniel.proyectomoviles.entidades
 
+import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -11,7 +12,7 @@ class Cliente (val id:Int,
                val contraseniaUsuario:String,
                val correoUsuario:String,
                val tarjetasDeCredito: List<TarjetaCredito>?,
-               val fotoId: Int,
+               val foto: Foto,
                val createdAt: Long,
                val updatedAt:Long) : Parcelable {
 
@@ -25,7 +26,7 @@ class Cliente (val id:Int,
             parcel.readString(),
             parcel.readString(),
             parcel.createTypedArrayList(TarjetaCredito),
-            parcel.readInt(),
+            parcel.readParcelable(Foto.javaClass.classLoader),
             parcel.readLong(),
             parcel.readLong()) {
     }
@@ -39,7 +40,7 @@ class Cliente (val id:Int,
         parcel.writeString(contraseniaUsuario)
         parcel.writeString(correoUsuario)
         parcel.writeTypedList(tarjetasDeCredito)
-        parcel.writeInt(fotoId)
+        parcel.writeParcelable(foto, flags)
         parcel.writeLong(createdAt)
         parcel.writeLong(updatedAt)
     }
