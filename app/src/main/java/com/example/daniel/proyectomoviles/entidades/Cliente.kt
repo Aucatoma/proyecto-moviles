@@ -59,4 +59,21 @@ class Cliente (val id:Int,
         }
     }
 
+    override fun toString(): String {
+        return """
+            $id
+            $nombre
+            $apellido
+            $telefono
+            $nombreUsuario
+            $contraseniaUsuario
+            $createdAt
+            $updatedAt
+            ${foto.id}
+            ${foto.datos}
+            ${foto.extension}
+            ${tarjetasDeCredito!!.size}
+            """
+    }
+
 }

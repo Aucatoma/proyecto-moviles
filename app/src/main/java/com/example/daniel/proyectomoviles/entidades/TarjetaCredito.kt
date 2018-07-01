@@ -2,13 +2,14 @@ package com.example.daniel.proyectomoviles.entidades
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.beust.klaxon.Json
 
 class TarjetaCredito (val id:Int,
                       val numeroTarjeta:String,
                       val codigoSeguridad:String,
                       val mesTarjeta:Int,
                       val anioTarjeta:Int,
-                      val recorridos:List<Recorrido>?,
+                      @Json(ignored = false) val recorridos:List<Recorrido>? = null,
                       val clienteId:Int,
                       val createdAt:Long,
                       val updatedAt:Long) : Parcelable {

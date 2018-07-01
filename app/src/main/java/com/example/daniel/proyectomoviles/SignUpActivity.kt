@@ -14,7 +14,9 @@ import android.view.View
 import android.widget.ProgressBar
 import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.entidades.Foto
+import com.example.daniel.proyectomoviles.http.HttpRequest
 import com.example.daniel.proyectomoviles.imageHandle.ImageFileHandler
+import com.example.daniel.proyectomoviles.parser.JsonParser
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.coroutines.experimental.Deferred
@@ -28,9 +30,10 @@ import java.util.*
 class SignUpActivity : AppCompatActivity() {
 
     var imagePath = ""
+    lateinit var cliente: Deferred<Cliente>
     lateinit var imageBitmap: Bitmap
     val imageHandler = ImageFileHandler()
-
+    private val jsonParser = JsonParser()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +45,17 @@ class SignUpActivity : AppCompatActivity() {
 
         btn_sign_up.setOnClickListener { v: View? ->
             async (UI){
-                val cliente: Deferred<Cliente> = bg{
+                 cliente = bg{
                     crearCliente()
                 }
+                val clienteSync = cliente.await()
+                val fotoJson = jsonParser.fotoToJson(clienteSync.foto)
+                val clienteJson = jsonParser.clienteToJson(clienteSync)
                 Log.i("CLIENTE_CREADO", cliente.await().nombre)
+                HttpRequest.registrarCliente(clienteJson, fotoJson, { error, datos ->
+                    Log.i("RESPUESTA_REGISTRO", datos)
+                })
+
             }
         }
 
@@ -97,9 +107,8 @@ class SignUpActivity : AppCompatActivity() {
         val telefono = editText_signUp_mobile.text.toString()
         val email = editText_signUp_email.text.toString()
         val username = editText_signUp_username.text.toString()
-        Log.i("CLIENTE_", "")
         val password = editText_signUp_password.text.toString()
-        val foto = Foto(-1, imageHandler.bitmapToB64String(imageBitmap), "jpg")
+        val foto = Foto(-1, imageHandler.bitmapToB64String(imageBitmap), "jpg", 0, 0)
 
         return Cliente(-1, nombre, apellido, telefono, username, password, email, null, foto, 0.toLong(), 0.toLong())
     }

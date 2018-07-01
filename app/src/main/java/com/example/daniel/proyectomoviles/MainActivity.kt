@@ -9,6 +9,9 @@ import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.daniel.proyectomoviles.entidades.Cliente
+import com.example.daniel.proyectomoviles.http.HttpRequest
+import com.example.daniel.proyectomoviles.parser.JsonParser
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.uiThread
@@ -19,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         val PERMISSIONS_REQUEST = 1
     }
+    val jsonParser = JsonParser()
     val verificadorIntennet = VerificadorInternet()
     val permisos = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -29,17 +33,30 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.CAMERA)
 
+    var cliente: Cliente? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        HttpRequest.obtenerDato("Cliente", "2",{ error, datos ->
+            /* Este bloque de cód*/
+            if(error){
+
+            }else{
+                Log.i("CLIENTE_1", datos)
+                //cliente = jsonParser.jsonToCliente(datos) as Cliente
+               // Log.i("CLIENTE_1", "$cliente")
+            }
+        })
+
+        Log.i("CLIENTE_1", "PRIMERO")
         Log.i("#_PERMISOS", "${permisos.size}")
         val permisosApedir = checkPermissions(permisos)
-        Log.i("#_PERMISOS", "${permisosApedir.size}")
+        Log.i("#_PERMISOS", "${permisosApedir.size} - ${permisosApedir.last()}")
         if(permisosApedir.isNotEmpty()){
-            ActivityCompat.requestPermissions(this, permisosApedir.toTypedArray(), PERMISSIONS_REQUEST )
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSIONS_REQUEST )
         }
 
         btn_iniciar_sesion.setOnClickListener { view: View? ->

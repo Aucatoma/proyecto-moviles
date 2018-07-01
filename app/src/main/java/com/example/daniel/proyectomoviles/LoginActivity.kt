@@ -34,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
     var imagePath = ""
     val imageHandler = ImageFileHandler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -77,15 +78,5 @@ class LoginActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 }

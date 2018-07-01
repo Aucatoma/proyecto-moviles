@@ -5,21 +5,24 @@ import android.os.Parcelable
 
 class Foto (val id:Int,
             val datos:String,
-            val extension:String) : Parcelable {
+            val extension:String,
+            val createdAt: Long,
+            val updatedAt: Long) : Parcelable {
 
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
             parcel.readString(),
-            parcel.readString()) {
-
-
-    }
+            parcel.readString(),
+            parcel.readLong(),
+            parcel.readLong())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
         parcel.writeString(datos)
         parcel.writeString(extension)
+        parcel.writeLong(createdAt)
+        parcel.writeLong(updatedAt)
     }
 
     override fun describeContents(): Int {
