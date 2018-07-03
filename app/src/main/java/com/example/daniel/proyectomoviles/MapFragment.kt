@@ -72,8 +72,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //-----------------------------------------------------//
 
 
-
-
     var distanciaString = ""
     var direccionOrigen= ""
     var direccioDestino=""
@@ -160,7 +158,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 val materialDialog = MaterialDialog.Builder(requireContext())
                         .onAny { dialog, which ->
                             if(which.name=="POSITIVE"){
-                                registrarRecorrido()
+                                //registrarRecorrido()
+
+
                             }else if (which.name=="NEGATIVE"){ }
 
                         }
