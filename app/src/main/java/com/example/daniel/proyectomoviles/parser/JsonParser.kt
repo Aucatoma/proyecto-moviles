@@ -13,6 +13,10 @@ class JsonParser {
         return klaxon.parse<Cliente>(json)
     }
 
+    fun jsonToRecorrido(json:String):Recorrido?{
+        return klaxon.parse<Recorrido>(json)
+    }
+
     fun clienteToJson(cliente: Cliente): String{
         return """
             {
@@ -24,8 +28,6 @@ class JsonParser {
             "correoUsuario":"${cliente.correoUsuario}"
             }""".trimIndent()
     }
-
-
 
     fun fotoToJson(foto: Foto): String{
         return """

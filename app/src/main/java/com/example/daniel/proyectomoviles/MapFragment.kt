@@ -157,40 +157,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         btn_solicitar_taxi.setOnClickListener { view: View? ->
 
             if(!txtBusqueda?.text.isNullOrBlank()){
-
                 val materialDialog = MaterialDialog.Builder(requireContext())
-
                         .onAny { dialog, which ->
-
                             if(which.name=="POSITIVE"){
-
                                 registrarRecorrido()
-
-                            }else if (which.name=="NEGATIVE"){
-
-
-
-                            }
-
+                            }else if (which.name=="NEGATIVE"){ }
 
                         }
-
-
                         .title(R.string.cabecera_dialog)
                         .customView(R.layout.alert_dialog_solicitar_taxi,true)
                         .positiveText(R.string.btn_aceptar_carrera)
                         .negativeText(R.string.btn_cancelar_carrera)
                         .show()
 
-
-
-
-
                 if(materialDialog!=null){
-
                     val view = materialDialog.customView
                     llenarAlertDialog(view)
-
                 }
 
             }else{
@@ -242,10 +224,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         if(view!=null){
 
+            //Llenamos nuestro AlertDialog
             var campoOrigen:TextView = view.findViewById(R.id.txt_origen_input)
             var campoDestino:TextView = view.findViewById(R.id.txt_destino_input)
             var campoDistancia:TextView = view.findViewById(R.id.txt_distancia_input)
             var campoCosto: TextView = view.findViewById(R.id.txt_costo_viaje)
+
+            //Consultamos las tarjetas de credito que tenga el usuario
+
 
             campoOrigen.text=direccionOrigen
             campoDestino.text=direccioDestino
