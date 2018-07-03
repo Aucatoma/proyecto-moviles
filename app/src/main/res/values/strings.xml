@@ -28,9 +28,10 @@
     <string name="btn_solicitar_taxu">Solicitar taxi</string>
     <string name="marcador_orgien">Usted está aquí</string>
     <string name="marcador_destino">Su destino</string>
+    <string name="texto_busqueda_vacia">Ingrese su destino</string>
 
 
-    <!--String AlertDialog Cnfirmacion carrera-->
+    <!--String AlertDialog Confirmacion carrera-->
     <string name="cabecera_dialog">Confirmación</string>
     <string name="txt_origen">Origen: </string>
     <string name="txt_destino">Destino: </string>

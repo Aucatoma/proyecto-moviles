@@ -56,9 +56,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val coordenadasOrigen = ArrayList<String>()
     val coordenadasDestino = ArrayList<String>()
     var distancia = 0.0
-    val valorRecorrido = 0.0
+    var valorRecorrido = 0.0
 
     //-----------------------------------------------------//
+
+
 
 
     var distanciaString = ""
@@ -94,6 +96,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         busqueda = view.findViewById(R.id.texto_busqueda) as EditText
         inputMethodManager = this.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+
+
         val mapFragment: SupportMapFragment? = childFragmentManager.findFragmentById(R.id.map1) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
@@ -104,47 +108,63 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         establecerPosicionUsuario()
 
+        val txtBusqueda: TextView? = view?.findViewById(R.id.texto_busqueda)
+
+
+
 
         btn_buscar_direccion.setOnClickListener { view: View? ->
 
-            //Se usa para que al momento de que haga click en el boton, el teclado se esconda
-            async {
-                val hayConexion= verificadorIntenet.hasActiveInternetConnection(requireContext())
+            if(!txtBusqueda?.text.isNullOrBlank()){
 
-                uiThread {
+                //Se usa para que al momento de que haga click en el boton, el teclado se esconda
+                async {
+                    val hayConexion= verificadorIntenet.hasActiveInternetConnection(requireContext())
 
-                    if(hayConexion){
+                    uiThread {
 
-                        inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
-                        buscarLocacion()
+                        if(hayConexion){
 
-                    }else{
-                        val toast = Toast.makeText(requireContext(), R.string.conexion_internet, Toast.LENGTH_SHORT)
-                        toast.show()
+                            inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
+                            buscarLocacion()
+
+                        }else{
+                            val toast = Toast.makeText(requireContext(), R.string.conexion_internet, Toast.LENGTH_SHORT)
+                            toast.show()
+                        }
+
                     }
-
                 }
+
+            }else{
+                val toast = Toast.makeText(requireContext(), R.string.texto_busqueda_vacia, Toast.LENGTH_SHORT)
+                toast.show()
             }
 
         }
 
         btn_solicitar_taxi.setOnClickListener { view: View? ->
 
-            val materialDialog = MaterialDialog.Builder(requireContext())
-                    .title(R.string.cabecera_dialog)
-                    .customView(R.layout.alert_dialog_solicitar_taxi,true)
-                    .positiveText(R.string.btn_aceptar_carrera)
-                    .negativeText(R.string.btn_cancelar_carrera)
-                    .show()
+            if(!txtBusqueda?.text.isNullOrBlank()){
 
-            if(materialDialog!=null){
+                val materialDialog = MaterialDialog.Builder(requireContext())
+                        .title(R.string.cabecera_dialog)
+                        .customView(R.layout.alert_dialog_solicitar_taxi,true)
+                        .positiveText(R.string.btn_aceptar_carrera)
+                        .negativeText(R.string.btn_cancelar_carrera)
+                        .show()
 
-                val view = materialDialog.customView
+                if(materialDialog!=null){
 
-                llenarAlertDialog(view)
+                    val view = materialDialog.customView
+                    llenarAlertDialog(view)
 
+                }
+
+            }else{
+                val toast = Toast.makeText(requireContext(), R.string.texto_busqueda_vacia, Toast.LENGTH_SHORT)
+                toast.show()
             }
-
 
         }
 
@@ -157,12 +177,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             var campoOrigen:TextView = view.findViewById(R.id.txt_origen_input)
             var campoDestino:TextView = view.findViewById(R.id.txt_destino_input)
             var campoDistancia:TextView = view.findViewById(R.id.txt_distancia_input)
+            var campoCosto: TextView = view.findViewById(R.id.txt_costo_viaje)
 
             campoOrigen.text=direccionOrigen
             campoDestino.text=direccioDestino
             campoDistancia.text=distanciaString
 
+            calcularCostoRecorrido()
+
+           campoCosto.text = "$"+String.format("%.2f",valorRecorrido)
+
+
         }
+
+    }
+
+    private fun calcularCostoRecorrido() {
+
+        Log.i("COSTO",distancia.toString())
+
+        valorRecorrido = (distancia/1000) * 1.15
 
     }
 

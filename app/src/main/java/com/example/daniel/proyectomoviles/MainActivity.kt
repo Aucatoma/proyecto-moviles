@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_iniciar_sesion.setOnClickListener { view: View? ->
-            launchLoginActivity()
-            //irAActividadMapa()
+            //launchLoginActivity()
+            irAActividadMapa()
         }
 
 
