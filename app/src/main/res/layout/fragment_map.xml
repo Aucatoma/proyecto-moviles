@@ -59,7 +59,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="-112dp"
             android:layout_toRightOf="@id/texto_busqueda"
-            android:text="@string/btn_buscar" />
+            android:background="#000"
+            android:text="@string/btn_buscar"
+            android:textColor="#fff"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
@@ -67,7 +70,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="56dp"
         android:layout_marginBottom="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -78,14 +81,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map1"
-        app:layout_constraintVertical_bias="0.705"
+        app:layout_constraintVertical_bias="0.771"
         app:layout_editor_absoluteY="455dp">
 
         <Button
             android:id="@+id/btn_solicitar_taxi"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/background_dark"
             android:text="@string/btn_solicitar_taxu"
+            android:textColor="@android:color/background_light"
+            android:textStyle="bold"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp"></Button>
 

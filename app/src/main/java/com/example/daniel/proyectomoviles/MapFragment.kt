@@ -18,10 +18,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
+import com.example.daniel.proyectomoviles.entidades.Recorrido
+import com.example.daniel.proyectomoviles.http.HttpRequest
+import com.example.daniel.proyectomoviles.parser.JsonParser
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,10 +36,14 @@ import com.google.android.gms.maps.model.*
 import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.main.alert_dialog_solicitar_taxi.*
 import kotlinx.android.synthetic.main.fragment_map.*
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.android.UI
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.net.URL
+import java.util.*
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -58,6 +66,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var distancia = 0.0
     var valorRecorrido = 0.0
 
+    lateinit var recorrido: Deferred<Recorrido>
+    private val jsonParser = JsonParser()
+
     //-----------------------------------------------------//
 
 
@@ -75,7 +86,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     val verificadorIntenet = VerificadorInternet()
 
-    val ZOOM_LEVEL = 17f
+    val ZOOM_LEVEL = 12f
 
     //Declaramos un objeto bounds para que toda la ruta que se dibuje quepa en la pantalla
     val LatLongB = LatLngBounds.Builder()
@@ -148,11 +159,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             if(!txtBusqueda?.text.isNullOrBlank()){
 
                 val materialDialog = MaterialDialog.Builder(requireContext())
+
+                        .onAny { dialog, which ->
+
+                            if(which.name=="POSITIVE"){
+
+                                registrarRecorrido()
+
+                            }else if (which.name=="NEGATIVE"){
+
+
+
+                            }
+
+
+                        }
+
+
                         .title(R.string.cabecera_dialog)
                         .customView(R.layout.alert_dialog_solicitar_taxi,true)
                         .positiveText(R.string.btn_aceptar_carrera)
                         .negativeText(R.string.btn_cancelar_carrera)
                         .show()
+
+
+
+
 
                 if(materialDialog!=null){
 
@@ -167,6 +199,42 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
 
         }
+
+    }
+
+    private fun registrarRecorrido() {
+
+        kotlinx.coroutines.experimental.async(UI) {
+            recorrido = bg {
+                crearRecorrido()
+            }
+            val recorridoSync = recorrido.await()
+            val recorridoJson = jsonParser.recorridoToJson(recorridoSync)
+
+
+
+        }
+        crearRecorrido()
+
+    }
+
+    private fun crearRecorrido(): Recorrido {
+
+        return Recorrido(-1,
+                coordenadasOrigen[0],
+                coordenadasOrigen[1],
+                coordenadasDestino[0],
+                coordenadasDestino[1],
+                distancia,
+                false,
+                Date().toString(),
+                valorRecorrido,
+                -1,
+                -1,
+                0.toLong(),
+                0.toLong()
+
+                )
 
     }
 

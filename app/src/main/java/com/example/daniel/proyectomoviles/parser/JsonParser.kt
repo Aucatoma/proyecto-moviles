@@ -3,6 +3,7 @@ package com.example.daniel.proyectomoviles.parser
 import com.beust.klaxon.Klaxon
 import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.entidades.Foto
+import com.example.daniel.proyectomoviles.entidades.Recorrido
 
 class JsonParser {
 
@@ -32,5 +33,26 @@ class JsonParser {
             "datos":"${foto.datos}",
             "extension":"${foto.extension}"
             }""".trimIndent()
+    }
+
+    fun recorridoToJson(recorrido: Recorrido):String{
+
+        return """
+            {
+            "origenLatitud":"${recorrido.origenLatitud}",
+            "origenLongitud":"${recorrido.origenLongitud}",
+            "destinoLatitud":"${recorrido.destinoLatitud}",
+            "destinoLongitud":"${recorrido.destinoLongitud}",
+            "distanciaRecorrido":"${recorrido.distanciaRecorrido}",
+            "estadoRecorrido":"${recorrido.estadoRecorrido}",
+            "fechaRecorrido":"${recorrido.fechaRecorrido}",
+            "valorRecorrido":"${recorrido.valorRecorrido}",
+            "tarjetaCreditoId":"${recorrido.tarjetaCreditoId}",
+            "conductorId":"${recorrido.conductorId}",
+            "createdAt":"${recorrido.createdAt}",
+            "updatedAt":"${recorrido.updatedAt}",
+            }""".trimIndent()
+
+
     }
 }
