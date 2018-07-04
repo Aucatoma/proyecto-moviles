@@ -1,6 +1,7 @@
 package com.example.daniel.proyectomoviles
 
 
+import android.graphics.Canvas
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,14 +12,20 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.daniel.proyectomoviles.adaptadores.AdaptadorPendientes
 import com.example.daniel.proyectomoviles.entidades.Recorrido
+import com.example.daniel.proyectomoviles.swipeUtilities.SwipeController
 import java.util.*
 import kotlin.collections.ArrayList
+import android.support.v7.widget.helper.ItemTouchHelper
+
+
 
 class PendientesFragment : Fragment() {
 
     lateinit var recyclerRecorrido: RecyclerView
     lateinit var listaRecorridos: ArrayList<Recorrido>
     lateinit var listaPendientes: ArrayList<Recorrido>
+
+    val swipeController = SwipeController()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -29,7 +36,7 @@ class PendientesFragment : Fragment() {
         listaPendientes = ArrayList()
 
         recyclerRecorrido = view.findViewById(R.id.recycler_view_pendientes)
-        recyclerRecorrido.layoutManager = LinearLayoutManager(requireContext())
+        recyclerRecorrido.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         llenarRecorridos()
 
@@ -37,7 +44,16 @@ class PendientesFragment : Fragment() {
         recyclerRecorrido.adapter = adaptador
 
 
-        return view
+        var itemTouchhelper = ItemTouchHelper(swipeController)
+        itemTouchhelper.attachToRecyclerView(recyclerRecorrido)
+
+        recyclerRecorrido.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+                swipeController.onDraw(c)
+            }
+        })
+
+      return view
     }
 
     private fun llenarRecorridos() {
@@ -84,10 +100,9 @@ class PendientesFragment : Fragment() {
                 0,
                 0))
 
-        //Log.i("TAMAÑO",listaRecorridos.size.toString())
+
 
         //Ahora, para enviar al RV de pendientes, solo se escogen aquellos cuyo estado sea false, por tanto se recorre el arreglo
-
         listaRecorridos.forEach { recorrido:Recorrido ->
 
             //Se añaden solo los pendientes

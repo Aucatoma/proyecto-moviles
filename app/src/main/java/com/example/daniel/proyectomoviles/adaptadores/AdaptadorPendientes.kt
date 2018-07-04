@@ -42,24 +42,21 @@ class AdaptadorPendientes (internal var recorridos: ArrayList<Recorrido>, intern
         holder.txtDestinoRecorrido.text =  direccionDestino[0].getAddressLine(0)
 
         //Se coloca la fecha en la que se solicito el recorrido
-
-
         holder.txtFechaRecorrido.text = recorridos[position].fechaRecorrido
 
     }
-
 
     inner class ViewHolderPendientes(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         internal var txtDestinoRecorrido:TextView
         internal var txtFechaRecorrido:TextView
-        internal var btnVerMas:Button
+        //internal var btnVerMas:Button
 
         init {
 
             txtDestinoRecorrido = itemView.findViewById(R.id.txt_destino_pendiente)
             txtFechaRecorrido = itemView.findViewById(R.id.txt_fecha_pendiente)
-            btnVerMas = itemView.findViewById(R.id.btn_detalle_pendiente)
+            //btnVerMas = itemView.findViewById(R.id.btn_detalle_pendiente)
 
         }
 

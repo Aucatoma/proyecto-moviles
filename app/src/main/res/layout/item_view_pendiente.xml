@@ -6,84 +6,65 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light">
 
-    <RelativeLayout
-        android:layout_width="329dp"
-        android:layout_height="2dp"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#e9e8e8"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_pendiente"
-        app:layout_constraintVertical_bias="0.025">
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_pendiente"
-        android:layout_width="386dp"
-        android:layout_height="99dp"
-        android:background="@android:color/background_light"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="69dp"
-            android:orientation="horizontal">
+            android:id="@+id/linear_pendiente"
+            android:layout_width="386dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_light"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
-            <TextView
-                android:id="@+id/txt_destino_pendiente"
-                android:layout_width="174dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="8sp"
-                android:text="TextView"
-                android:textAlignment="textStart"
-                android:textColor="@android:color/background_dark" />
-
-            <TextView
-                android:id="@+id/txt_fecha_pendiente"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="TextView"
-                android:textAlignment="center"
-                android:textColor="@android:color/background_dark"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_emitir_pago"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/boton_emitir_pago" />
+                android:layout_height="69dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_ver_mas"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/boton_ver_mas" />
+                <TextView
+                    android:id="@+id/txt_destino_pendiente"
+                    android:layout_width="89dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="8sp"
+                    android:text="TextView"
+                    android:textAlignment="textStart"
+                    android:textColor="@android:color/background_dark" />
+
+                <TextView
+                    android:id="@+id/txt_fecha_pendiente"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/background_dark"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>
