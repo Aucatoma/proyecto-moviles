@@ -65,19 +65,25 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_detalle_pendiente"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="#d8d7d7"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="Ver más"
-            android:textAllCaps="false"
-            android:textColor="@android:color/background_dark"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:layout_height="37dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_emitir_pago"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/boton_emitir_pago" />
+
+            <Button
+                android:id="@+id/btn_ver_mas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/boton_ver_mas" />
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

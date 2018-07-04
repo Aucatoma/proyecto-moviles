@@ -59,4 +59,8 @@
     <string name="sign_up_email">Correo electrónico</string>
     <string name="sign_up_btn">Registrarse</string>
 
+    <!--Strings de RV Pendientes-->
+    <string name="boton_ver_mas">Ver más</string>
+    <string name="boton_emitir_pago">Emitir pago</string>
+
 </resources>
