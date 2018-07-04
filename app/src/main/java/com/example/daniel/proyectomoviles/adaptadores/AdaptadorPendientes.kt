@@ -7,6 +7,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,16 +38,13 @@ class AdaptadorPendientes (internal var recorridos: ArrayList<Recorrido>, intern
         direccionDestino = ArrayList()
         direccionDestino = localizador.getFromLocation(recorridos[position].destinoLatitud.toDouble(), recorridos[position].destinoLongitud.toDouble(),1)
 
-
         //Se coloca la dirección en el textView, ejemplo: Foch, Quito
-        holder.txtDestinoRecorrido.text = direccionDestino[0].featureName + ", " + direccionDestino[0].locality
+        holder.txtDestinoRecorrido.text =  direccionDestino[0].getAddressLine(0)
+
         //Se coloca la fecha en la que se solicito el recorrido
+
+
         holder.txtFechaRecorrido.text = recorridos[position].fechaRecorrido
-
-
-
-
-
 
     }
 

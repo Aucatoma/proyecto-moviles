@@ -53,6 +53,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //Para mas informacion ir a: https://developer.android.com/trainning/location/retrieve-current
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+
+
+
     private lateinit var mMap: GoogleMap
     private lateinit var busqueda:EditText
 
@@ -110,6 +113,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val mapFragment: SupportMapFragment? = childFragmentManager.findFragmentById(R.id.map1) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
+
+
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -118,9 +124,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         establecerPosicionUsuario()
 
         val txtBusqueda: TextView? = view?.findViewById(R.id.texto_busqueda)
-
-
-
 
         btn_buscar_direccion.setOnClickListener { view: View? ->
 
@@ -159,7 +162,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         .onAny { dialog, which ->
                             if(which.name=="POSITIVE"){
                                 //registrarRecorrido()
+                                Log.i("Coordenadas",coordenadasDestino[0])
+                                Log.i("Coordenadas",coordenadasDestino[1])
 
+                                val pendientesFragment = PendientesFragment()
+                                requireActivity()
+                                        .supportFragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.mainLayout, pendientesFragment)
+                                        .addToBackStack(null)
+                                        .commit()
 
                             }else if (which.name=="NEGATIVE"){ }
 
@@ -270,7 +282,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.i("Search","El usuario busco esto: "+textoBusqueda)
 
         }catch (e:IOException){
+
             Log.i("Search","Error: "+e.message)
+
         }
         if(direcciones.isNotEmpty()){
 
