@@ -18,8 +18,9 @@ enum class ButtonsState {
     RIGHT_VISIBLE
 }
 
-class SwipeController() : Callback() {
+class SwipeController(requireContext: Context) : Callback() {
 
+    var context = requireContext
 
 
     private var buttonShowedState = ButtonsState.GONE
@@ -87,13 +88,13 @@ class SwipeController() : Callback() {
 
         p.color = Color.LTGRAY
         c?.drawRoundRect(leftButton, corners, corners, p)
-        drawText("Más", c, leftButton, p)
+        drawText(context.getString(R.string.boton_ver_mas), c, leftButton, p)
 
         val rightButton = RectF(itemView.right - buttonWidthWithoutPadding, itemView.top.toFloat() + 10, itemView.right.toFloat() - 20, itemView.bottom.toFloat())
 
         p.color = Color.BLACK
         c?.drawRoundRect(rightButton, corners, corners, p)
-        drawText("Pagar", c, rightButton, p)
+        drawText(context.getString(R.string.boton_emitir_pago), c, rightButton, p)
 
         buttonInstance = null
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {

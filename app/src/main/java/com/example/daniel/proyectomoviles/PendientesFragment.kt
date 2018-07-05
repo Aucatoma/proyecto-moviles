@@ -23,7 +23,7 @@ class PendientesFragment : Fragment() {
     lateinit var listaRecorridos: ArrayList<Recorrido>
     lateinit var listaPendientes: ArrayList<Recorrido>
 
-    val swipeController = SwipeController()
+    lateinit var swipeController : SwipeController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -40,6 +40,8 @@ class PendientesFragment : Fragment() {
 
         val adaptador = AdaptadorPendientes(listaPendientes,requireContext())
         recyclerRecorrido.adapter = adaptador
+
+        swipeController = SwipeController(requireContext())
 
 
         var itemTouchhelper = ItemTouchHelper(swipeController)
