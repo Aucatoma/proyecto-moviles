@@ -1,28 +1,25 @@
 package com.example.daniel.proyectomoviles
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
+import android.util.Log
 import android.view.View
-import com.example.daniel.proyectomoviles.imageHandle.ImageFileHandler
+import com.example.daniel.proyectomoviles.http.HttpRequest
+import com.example.daniel.proyectomoviles.utilities.Hash
+import com.example.daniel.proyectomoviles.utilities.ImageFileHandler
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +31,9 @@ class LoginActivity : AppCompatActivity() {
 
     var imagePath = ""
     val imageHandler = ImageFileHandler()
+    lateinit var imageBitmap: Bitmap
+    lateinit var username: String
+    lateinit var password: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +41,17 @@ class LoginActivity : AppCompatActivity() {
 
         imgBtn_face_api.setOnClickListener { v: View? ->
             tomarFoto()
+        }
+
+        btn_sign_in.setOnClickListener { v: View? ->
+            obtenerUserPass()
+            HttpRequest.login(username, "", imageHandler.bitmapToB64String(imageBitmap), { error, datos ->
+                if(error){
+
+                }else{
+                    Log.i("LOGIN_SERV_RES", datos)
+                }
+            })
         }
     }
 
@@ -51,8 +62,14 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
-            bg{
-                imageHandler.rotateImageFile(File(imagePath))
+            async(UI){
+                val imageRotated: Deferred<Boolean> = bg{
+                    imageHandler.rotateImageFile(File(imagePath))
+                }
+                if(imageRotated.await()){
+                    imageBitmap = imageHandler.fileToBitmap(File(imagePath))
+                    //HttpRequest.login()
+                }
             }
         }
     }
@@ -79,4 +96,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+
+    fun obtenerUserPass(){
+        username = editText_login_username.text.toString()
+        password = Hash.stringHash("SHA-512", editText_login_password.text.toString())
+    }
 }

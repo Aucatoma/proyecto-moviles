@@ -11,13 +11,12 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.http.HttpRequest
-import com.example.daniel.proyectomoviles.imageHandle.ImageFileHandler
+import com.example.daniel.proyectomoviles.utilities.ImageFileHandler
 import com.example.daniel.proyectomoviles.parser.JsonParser
-import kotlinx.android.synthetic.main.activity_login.*
+import com.example.daniel.proyectomoviles.utilities.Hash
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
@@ -107,7 +106,7 @@ class SignUpActivity : AppCompatActivity() {
         val telefono = editText_signUp_mobile.text.toString()
         val email = editText_signUp_email.text.toString()
         val username = editText_signUp_username.text.toString()
-        val password = editText_signUp_password.text.toString()
+        val password = Hash.stringHash("SHA-512", editText_signUp_password.text.toString())
         val foto = Foto(-1, imageHandler.bitmapToB64String(imageBitmap), "jpg", 0, 0)
 
         return Cliente(-1, nombre, apellido, telefono, username, password, email, null, foto, 0.toLong(), 0.toLong())

@@ -19,14 +19,13 @@ class JsonParser {
 
     fun clienteToJson(cliente: Cliente): String{
         return """
-            {
-            "nombre":"${cliente.nombre}",
+            {"nombre":"${cliente.nombre}",
             "apellido":"${cliente.apellido}",
             "telefono":"${cliente.telefono}",
             "nombreUsuario":"${cliente.nombreUsuario}",
-            "contraseniaUsuario":${cliente.contraseniaUsuario},
+            "contraseniaUsuario":"${cliente.contraseniaUsuario}",
             "correoUsuario":"${cliente.correoUsuario}"
-            }""".trimIndent()
+            }""".trim().trimIndent()
     }
 
     fun fotoToJson(foto: Foto): String{

@@ -15,6 +15,44 @@ class HttpRequest {
         val puerto = "1337"
         val uriBase = "http://$direcccionIP:$puerto"
 
+        fun login(username: String, password: String = "", foto: String = "", callback: (error: Boolean, datos: String) -> Any){
+            Log.i("LOGIN_USER", "Haciendo login")
+            var error = false
+            var datos = ""
+            var jsonBody = ""
+            if(!password.equals("")){
+                jsonBody =
+                        """{
+                            "username": "$username",
+                            "password": "$password"
+                            }""".trimIndent().trim()
+            }
+            if(!foto.equals("")) {
+                jsonBody =
+                        """{
+                            "username": "$username",
+                            "foto":"$foto"
+                            }""".trimIndent().trim()
+            }
+
+            val request = "$uriBase/cliente/login".httpPost()
+            request.header(Pair("Content-Type", "application/json"))
+            request.body(jsonBody)
+            request.responseString{ request, response, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        Log.i("HTTP_FUEL_ERROR", "${result.getException()} \n ${result.error.response}")
+                        error = true
+                        callback(error, datos)
+                    }
+                    is Result.Success -> {
+                        datos = result.get()
+                        callback(error, datos)
+                    }
+                }
+            }
+
+        }
 
         fun registrarCliente(cliente: String, foto: String, callback: (error: Boolean, datos: String) -> Any){
             var error = false
