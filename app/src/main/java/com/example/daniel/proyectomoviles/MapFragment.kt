@@ -14,16 +14,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import com.afollestad.materialdialogs.DialogAction
+import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
+import com.beust.klaxon.Klaxon
 import com.beust.klaxon.Parser
 import com.example.daniel.proyectomoviles.entidades.Recorrido
+import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
 import com.example.daniel.proyectomoviles.http.HttpRequest
 import com.example.daniel.proyectomoviles.parser.JsonParser
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -44,6 +42,7 @@ import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.net.URL
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -71,6 +70,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     lateinit var recorrido: Deferred<Recorrido>
     private val jsonParser = JsonParser()
+    var tarjetasCredito:List<TarjetaCredito>? = ArrayList()
 
     //-----------------------------------------------------//
 
@@ -158,14 +158,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         btn_solicitar_taxi.setOnClickListener { view: View? ->
 
             if(!txtBusqueda?.text.isNullOrBlank()){
+
+
+
+
                 val materialDialog = MaterialDialog.Builder(requireContext())
                         .onAny { dialog, which ->
                             if(which.name=="POSITIVE"){
+
                                 //registrarRecorrido()
-                                Log.i("Coordenadas",coordenadasDestino[0])
-                                Log.i("Coordenadas",coordenadasDestino[1])
 
                                 val pendientesFragment = PendientesFragment()
+
                                 requireActivity()
                                         .supportFragmentManager
                                         .beginTransaction()
@@ -184,7 +188,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 if(materialDialog!=null){
                     val view = materialDialog.customView
+
                     llenarAlertDialog(view)
+
                 }
 
             }else{
@@ -196,6 +202,44 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     }
 
+    private fun consultarTarjetasCredito() {
+
+        HttpRequest.obtenerDatos("TarjetaCredito", { error, datos ->
+            if(error){
+
+            }else{
+                tarjetasCredito = Klaxon().parseArray(datos)
+            }
+        })
+
+
+
+    }
+
+    private fun inicializarSpinner(view: View) {
+
+        val spinner:Spinner = view.findViewById(R.id.spinner_tarjetas)
+
+        val opcionesTarjetasSpinner:ArrayList<String>
+        opcionesTarjetasSpinner = ArrayList()
+
+        if(tarjetasCredito?.size==0){
+
+            Log.i("TARJETAS","ENTRE")
+            opcionesTarjetasSpinner.add(resources.getString(R.string.no_tiene_tarjetas))
+
+        }else{
+            tarjetasCredito?.forEach { tarjetasCredito:TarjetaCredito ->
+                opcionesTarjetasSpinner.add(tarjetasCredito.toString())
+            }
+        }
+
+        val adaptadorSpinner = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_dropdown_item,opcionesTarjetasSpinner)
+        adaptadorSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter=adaptadorSpinner
+
+    }
+
     private fun registrarRecorrido() {
 
         kotlinx.coroutines.experimental.async(UI) {
@@ -204,9 +248,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
             val recorridoSync = recorrido.await()
             val recorridoJson = jsonParser.recorridoToJson(recorridoSync)
-
-
-
         }
         crearRecorrido()
 
@@ -248,6 +289,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             campoOrigen.text=direccionOrigen
             campoDestino.text=direccioDestino
             campoDistancia.text=distanciaString
+
+            consultarTarjetasCredito()
+            inicializarSpinner(view)
 
             calcularCostoRecorrido()
 

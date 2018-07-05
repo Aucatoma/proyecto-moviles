@@ -18,20 +18,15 @@ enum class ButtonsState {
     RIGHT_VISIBLE
 }
 
+class SwipeController() : Callback() {
 
-class SwipeController : Callback() {
+
 
     private var buttonShowedState = ButtonsState.GONE
     private var buttonWidth = 210f
     private var buttonInstance: RectF? = null
 
     private var currentItemViewHolder: RecyclerView.ViewHolder? = null
-
-
-
-
-
-
 
     private var swipeBack = false
 
@@ -78,10 +73,7 @@ class SwipeController : Callback() {
         }
 
         currentItemViewHolder = viewHolder
-
-
-
-    }
+   }
 
     private fun drawButtons(c: Canvas?, viewHolder: RecyclerView.ViewHolder?) {
         val buttonWidthWithoutPadding = buttonWidth - 6
@@ -91,6 +83,7 @@ class SwipeController : Callback() {
         val p = Paint()
 
         val leftButton = RectF(itemView!!.getLeft().toFloat() + 10, itemView.getTop().toFloat() + 10, itemView.left + buttonWidthWithoutPadding, itemView.getBottom().toFloat())
+
 
         p.color = Color.LTGRAY
         c?.drawRoundRect(leftButton, corners, corners, p)

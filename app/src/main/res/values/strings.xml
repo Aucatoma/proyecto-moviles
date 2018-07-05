@@ -39,6 +39,7 @@
     <string name="valor_a_pagar">Valor a pagar</string>
     <string name="btn_cancelar_carrera">Cancelar</string>
     <string name="btn_aceptar_carrera">Confirmar</string>
+    <string name="no_tiene_tarjetas">Sin tarjetas</string>
 
 
     <!--Strings sobre conexion a internet-->
@@ -60,7 +61,7 @@
     <string name="sign_up_btn">Registrarse</string>
 
     <!--Strings de RV Pendientes-->
-    <string name="boton_ver_mas">Ver más</string>
-    <string name="boton_emitir_pago">Emitir pago</string>
+    <string name="boton_ver_mas">Más</string>
+    <string name="boton_emitir_pago">Pagar</string>
 
 </resources>

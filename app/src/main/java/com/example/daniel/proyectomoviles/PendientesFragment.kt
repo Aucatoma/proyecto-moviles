@@ -6,14 +6,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.daniel.proyectomoviles.adaptadores.AdaptadorPendientes
 import com.example.daniel.proyectomoviles.entidades.Recorrido
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeController
-import java.util.*
 import kotlin.collections.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
 

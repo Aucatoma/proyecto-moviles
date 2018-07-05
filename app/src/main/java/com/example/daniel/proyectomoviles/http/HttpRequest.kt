@@ -44,7 +44,7 @@ class HttpRequest {
         }
 
         fun obtenerDatos(modelo: String, callback: (error: Boolean, datos: String) -> Any) {
-            val request = "$uriBase/modelo".httpGet()
+            val request = "$uriBase/$modelo".httpGet()
             var error = false
             var datos = ""
 
@@ -64,6 +64,7 @@ class HttpRequest {
         }
 
         fun obtenerDato(modelo: String, id: String, callback: (error: Boolean, datos: String) -> Any) {
+
             val request = "$uriBase/$modelo/$id".httpGet()
             var error = false
             var datos = ""

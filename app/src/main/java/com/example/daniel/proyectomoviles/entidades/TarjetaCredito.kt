@@ -43,6 +43,12 @@ class TarjetaCredito (val id:Int,
         return 0
     }
 
+    override fun toString(): String {
+
+        return this.numeroTarjeta
+
+    }
+
     companion object CREATOR : Parcelable.Creator<TarjetaCredito> {
         override fun createFromParcel(parcel: Parcel): TarjetaCredito {
             return TarjetaCredito(parcel)
