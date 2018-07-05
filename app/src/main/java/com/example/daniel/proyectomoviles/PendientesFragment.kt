@@ -1,6 +1,4 @@
 package com.example.daniel.proyectomoviles
-
-
 import android.graphics.Canvas
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -16,7 +14,6 @@ import kotlin.collections.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeControllerActions
 
-
 class PendientesFragment : Fragment() {
 
     lateinit var recyclerRecorrido: RecyclerView
@@ -24,7 +21,6 @@ class PendientesFragment : Fragment() {
     lateinit var listaPendientes: ArrayList<Recorrido>
 
     lateinit var swipeController : SwipeController
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,6 +30,13 @@ class PendientesFragment : Fragment() {
         listaRecorridos = ArrayList()
         listaPendientes = ArrayList()
 
+        setUpRecyclerView(view)
+
+        return view
+    }
+
+    private fun setUpRecyclerView(view: View) {
+
         recyclerRecorrido = view.findViewById(R.id.recycler_view_pendientes)
         recyclerRecorrido.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
@@ -42,16 +45,27 @@ class PendientesFragment : Fragment() {
         val adaptador = AdaptadorPendientes(listaPendientes,requireContext())
         recyclerRecorrido.adapter = adaptador
 
+        setUpSwipeOnRecyclerView(adaptador)
+    }
+
+    private fun setUpSwipeOnRecyclerView(adaptador: AdaptadorPendientes) {
 
         swipeController = SwipeController(requireContext(), object : SwipeControllerActions(){
 
             override fun onRightClicked(position: Int) {
+
+                enviarPendienteAHistorial()
+
                 adaptador.recorridos.removeAt(position)
                 adaptador.notifyItemRemoved(position)
                 adaptador.notifyItemRangeChanged(position,adaptador.itemCount)
             }
-        })
 
+            override fun onLeftClicked(position: Int) {
+
+                irADetallePendienteFragment()
+            }
+        })
 
         var itemTouchhelper = ItemTouchHelper(swipeController)
         itemTouchhelper.attachToRecyclerView(recyclerRecorrido)
@@ -62,15 +76,21 @@ class PendientesFragment : Fragment() {
             }
         })
 
-      return view
     }
 
+
+    private fun irADetallePendienteFragment() {
+
+    }
+
+    private fun enviarPendienteAHistorial() {
+
+    }
 
 
     private fun llenarRecorridos() {
 
-        //Aqui se consultaria todos los recorridos de ese cliente y lo meteria en la listaRecorridos
-            //To do
+        //Aqui se consultaria todos los recorridos del cliente y lo meteria en la listaRecorridos
 
 
         //Supongamos que el resultado de los recorridos son los objetos de abajo
@@ -112,16 +132,16 @@ class PendientesFragment : Fragment() {
 
 
 
-        //Ahora, para enviar al RV de pendientes, solo se escogen aquellos cuyo estado sea false, por tanto se recorre el arreglo
+        //Ahora, para enviar al RV de pendientes, solo se escogen aquellos cuyo estado sea false,
+        //ya que eso significa que están pendientes aún
+
+        //Para hacer esto, primero recorremos el arreglo de los recorridos
         listaRecorridos.forEach { recorrido:Recorrido ->
 
-            //Se añaden solo los pendientes
+            //Y añadimos solo los pendientes
             if(!recorrido.estadoRecorrido){
                 listaPendientes.add(recorrido)
             }
-
-
-
 
         }
 

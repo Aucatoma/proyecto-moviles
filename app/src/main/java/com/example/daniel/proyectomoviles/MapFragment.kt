@@ -86,6 +86,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var featureName:String=""
 
     val verificadorIntenet = VerificadorInternet()
+    var hayConexion = true
 
     val ZOOM_LEVEL = 12f
 
@@ -129,14 +130,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             if(!txtBusqueda?.text.isNullOrBlank()){
 
-                //Se usa para que al momento de que haga click en el boton, el teclado se esconda
                 async {
-                    val hayConexion= verificadorIntenet.hasActiveInternetConnection(requireContext())
+                    //Se comprueba si hay conexion a internet
+                    hayConexion= verificadorIntenet.hasActiveInternetConnection(requireContext())
 
                     uiThread {
-
                         if(hayConexion){
-
+                            //Se usa para que al momento de que haga click en el boton, el teclado se esconda
                             inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
                             buscarLocacion()
 
@@ -144,10 +144,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             val toast = Toast.makeText(requireContext(), R.string.conexion_internet, Toast.LENGTH_SHORT)
                             toast.show()
                         }
-
                     }
                 }
-
             }else{
                 val toast = Toast.makeText(requireContext(), R.string.texto_busqueda_vacia, Toast.LENGTH_SHORT)
                 toast.show()
@@ -159,23 +157,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             if(!txtBusqueda?.text.isNullOrBlank()){
 
-
-
-
                 val materialDialog = MaterialDialog.Builder(requireContext())
+
+                        //Se crean los listeners para los botones del Dialog
                         .onAny { dialog, which ->
+
                             if(which.name=="POSITIVE"){
 
                                 //registrarRecorrido()
 
+                                //Se iniciar el nuevo Fragment de los RV de Pendientes
                                 val pendientesFragment = PendientesFragment()
-
-                                requireActivity()
-                                        .supportFragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.mainLayout, pendientesFragment)
-                                        .addToBackStack(null)
-                                        .commit()
+                                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.mainLayout, pendientesFragment).addToBackStack(null).commit()
 
                             }else if (which.name=="NEGATIVE"){ }
 
@@ -186,20 +179,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         .negativeText(R.string.btn_cancelar_carrera)
                         .show()
 
+                //Si no es null, se llena de AlertDialog
                 if(materialDialog!=null){
+                    //Es importante tomar la customView!!
                     val view = materialDialog.customView
-
                     llenarAlertDialog(view)
-
                 }
 
             }else{
                 val toast = Toast.makeText(requireContext(), R.string.texto_busqueda_vacia, Toast.LENGTH_SHORT)
                 toast.show()
             }
-
         }
-
     }
 
     private fun consultarTarjetasCredito() {
@@ -211,9 +202,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 tarjetasCredito = Klaxon().parseArray(datos)
             }
         })
-
-
-
     }
 
     private fun inicializarSpinner(view: View) {
@@ -225,7 +213,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         if(tarjetasCredito?.size==0){
 
-            Log.i("TARJETAS","ENTRE")
             opcionesTarjetasSpinner.add(resources.getString(R.string.no_tiene_tarjetas))
 
         }else{
@@ -270,7 +257,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 0.toLong()
 
                 )
-
     }
 
     private fun llenarAlertDialog(view: View?) {
@@ -283,13 +269,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             var campoDistancia:TextView = view.findViewById(R.id.txt_distancia_input)
             var campoCosto: TextView = view.findViewById(R.id.txt_costo_viaje)
 
-            //Consultamos las tarjetas de credito que tenga el usuario
-
-
             campoOrigen.text=direccionOrigen
             campoDestino.text=direccioDestino
             campoDistancia.text=distanciaString
 
+            //Consultamos las tarjetas de credito que tenga el usuario
             consultarTarjetasCredito()
             inicializarSpinner(view)
 
@@ -313,29 +297,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun buscarLocacion() {
         val textoBusqueda = busqueda.text.toString()
-
         val localizador = Geocoder(requireContext())
-
         var direcciones : List<Address>
         direcciones = ArrayList()
 
         try {
 
-            //Se añaden datos extras a la busqueda para que sea mas precisa
+            //Se añaden datos extras a la busqueda para que sea mas precisa. Se añade ciudad, pais y provicia desde donde el usuario hace la busqueda
             direcciones = localizador.getFromLocationName("$textoBusqueda, $ciudad, $pais, $provincia", 1)
             Log.i("Search","El usuario busco esto: "+textoBusqueda)
 
         }catch (e:IOException){
-
             Log.i("Search","Error: "+e.message)
-
         }
+
+        //Si se encontro la dirección...
         if(direcciones.isNotEmpty()){
 
             var direccionEncontrada = direcciones[0]
             Log.i("Search","Se encontro direccion!: "+direccionEncontrada.toString())
 
+            //...se añade el marcador
             aniadirMarcador(LatLng(direccionEncontrada.latitude,direccionEncontrada.longitude))
+
+            //direccionDestino es lo que se va a mostrar en el AlertDialog en el campo 'Destino'
             direccioDestino = "$textoBusqueda, $ciudad"
 
         }else{
@@ -350,6 +335,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if(posicion!=null){
 
             coordenadasDestino.clear()
+
             marcadorDestino = mMap.addMarker(MarkerOptions()
                     .position(posicion)
                     .title(requireContext().getString(R.string.marcador_destino))
@@ -493,12 +479,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val sensor = "sensor=false"
         val parametros = "$origen&$destino&$sensor"
 
-        //Reornamos la url construida
+        //Retornamos la url construida
         return "https://maps.googleapis.com/maps/api/directions/json?$parametros"
 
     }
 
     private fun establecerPosicionUsuario() {
+
         //En esta linea se pone this.requireActivity() porque el metodo recibe una actividad, no un fragment
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireActivity())
         //En esta linea se pone this.requiereContext para obtener le contexto del fragmento
