@@ -12,15 +12,19 @@ import android.view.MotionEvent
 import android.view.View
 import com.example.daniel.proyectomoviles.R
 
+
+//Fuente: https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
+
 enum class ButtonsState {
     GONE,
     LEFT_VISIBLE,
     RIGHT_VISIBLE
 }
 
-class SwipeController(requireContext: Context) : Callback() {
+class SwipeController(requireContext: Context, buttonActions:SwipeControllerActions) : Callback() {
 
     var context = requireContext
+    var buttonActions = buttonActions
 
 
     private var buttonShowedState = ButtonsState.GONE
@@ -175,7 +179,20 @@ class SwipeController(requireContext: Context) : Callback() {
                 recyclerView.setOnTouchListener { v, event -> false }
                 setItemsClickable(recyclerView, true)
                 swipeBack = false
+
+                //LISTENERS DE BOTONES 'MAS' Y 'PAGAR'
+                if(buttonActions != null && buttonInstance != null && buttonInstance!!.contains(event.x, event.y)){
+
+                    if(buttonShowedState == ButtonsState.LEFT_VISIBLE){
+                        buttonActions.onLeftClicked(viewHolder!!.adapterPosition)
+                    }else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE){
+                        buttonActions.onRightClicked(viewHolder!!.adapterPosition)
+                    }
+
+                }
+
                 buttonShowedState = ButtonsState.GONE
+                currentItemViewHolder = null
             }
             false
         }

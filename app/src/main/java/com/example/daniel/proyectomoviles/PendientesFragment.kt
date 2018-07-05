@@ -14,7 +14,7 @@ import com.example.daniel.proyectomoviles.entidades.Recorrido
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeController
 import kotlin.collections.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
-
+import com.example.daniel.proyectomoviles.swipeUtilities.SwipeControllerActions
 
 
 class PendientesFragment : Fragment() {
@@ -24,6 +24,7 @@ class PendientesFragment : Fragment() {
     lateinit var listaPendientes: ArrayList<Recorrido>
 
     lateinit var swipeController : SwipeController
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -41,7 +42,15 @@ class PendientesFragment : Fragment() {
         val adaptador = AdaptadorPendientes(listaPendientes,requireContext())
         recyclerRecorrido.adapter = adaptador
 
-        swipeController = SwipeController(requireContext())
+
+        swipeController = SwipeController(requireContext(), object : SwipeControllerActions(){
+
+            override fun onRightClicked(position: Int) {
+                adaptador.recorridos.removeAt(position)
+                adaptador.notifyItemRemoved(position)
+                adaptador.notifyItemRangeChanged(position,adaptador.itemCount)
+            }
+        })
 
 
         var itemTouchhelper = ItemTouchHelper(swipeController)
@@ -56,8 +65,9 @@ class PendientesFragment : Fragment() {
       return view
     }
 
-    private fun llenarRecorridos() {
 
+
+    private fun llenarRecorridos() {
 
         //Aqui se consultaria todos los recorridos de ese cliente y lo meteria en la listaRecorridos
             //To do
