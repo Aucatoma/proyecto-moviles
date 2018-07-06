@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,24 +10,54 @@
     <RelativeLayout
         android:id="@+id/rl_solicitar_taxi"
         android:layout_width="384dp"
-        android:layout_height="310dp"
+        android:layout_height="426dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/linear_metodo_pago"
+            android:layout_width="339dp"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="81dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_metodo_pago"
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:layout_marginLeft="10dp"
+                android:freezesText="false"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:text="Método de Pago:"
+                android:textAlignment="gravity"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_metodo_pago_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/layout_detalle_viaje"
             android:layout_width="339dp"
-            android:layout_height="130dp"
+            android:layout_height="218dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="27dp"
+            android:layout_marginTop="46dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="119dp"
-                android:layout_height="126dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <TextView
@@ -35,6 +66,7 @@
                     android:layout_height="42dp"
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
                     android:text="@string/txt_origen"
                     android:textAlignment="center"
                     android:textSize="12sp"
@@ -46,6 +78,7 @@
                     android:layout_height="42dp"
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
                     android:text="@string/txt_destino"
                     android:textAlignment="center"
                     android:textSize="12sp"
@@ -57,23 +90,51 @@
                     android:layout_height="42dp"
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical|center_horizontal"
+                    android:paddingLeft="8dp"
                     android:text="@string/txt_distancia"
                     android:textAlignment="center"
                     android:textSize="12sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_fecha_recorrido"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:paddingLeft="8dp"
+                    android:text="Fecha:"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_nombre_conductor"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:paddingLeft="8dp"
+                    android:text="Conductor:"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="126dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txt_origen_input"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:text="TextView"
                     android:textSize="12sp" />
 
@@ -81,8 +142,10 @@
                     android:id="@+id/txt_destino_input"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:text="TextView"
                     android:textSize="12sp" />
 
@@ -90,8 +153,32 @@
                     android:id="@+id/txt_distancia_input"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="TextView"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txt_fecha_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="TextView"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txt_conductor_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:text="TextView"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -104,7 +191,7 @@
             android:layout_height="49dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="17dp"
             android:gravity="left|right|center_vertical"
             android:orientation="horizontal">
 
@@ -131,12 +218,5 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinner_tarjetas"
-            android:layout_width="220dp"
-            android:layout_height="49dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="89dp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

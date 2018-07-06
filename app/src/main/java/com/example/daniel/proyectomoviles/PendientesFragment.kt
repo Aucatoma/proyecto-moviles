@@ -1,5 +1,7 @@
 package com.example.daniel.proyectomoviles
 import android.graphics.Canvas
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -12,6 +14,9 @@ import com.example.daniel.proyectomoviles.entidades.Recorrido
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeController
 import kotlin.collections.ArrayList
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
+import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeControllerActions
 
 class PendientesFragment : Fragment() {
@@ -29,6 +34,8 @@ class PendientesFragment : Fragment() {
 
         listaRecorridos = ArrayList()
         listaPendientes = ArrayList()
+
+
 
         setUpRecyclerView(view)
 
@@ -54,6 +61,7 @@ class PendientesFragment : Fragment() {
 
             override fun onRightClicked(position: Int) {
 
+
                 enviarPendienteAHistorial()
 
                 adaptador.recorridos.removeAt(position)
@@ -63,7 +71,7 @@ class PendientesFragment : Fragment() {
 
             override fun onLeftClicked(position: Int) {
 
-                irADetallePendienteFragment()
+                mostrarDetallePendiente(listaPendientes[position])
             }
         })
 
@@ -79,7 +87,62 @@ class PendientesFragment : Fragment() {
     }
 
 
-    private fun irADetallePendienteFragment() {
+    private fun mostrarDetallePendiente(recorrido: Recorrido) {
+
+        val materialDialog = MaterialDialog.Builder(requireContext())
+                .title("Detalle")
+                .customView(R.layout.alert_dialog_detalle_pendiente,true)
+                .positiveText("OK")
+                .show()
+
+        if(materialDialog!=null){
+
+            //Es importante tomar la customView!!
+            val view = materialDialog.customView
+            llenarDetalle(view, recorrido)
+        }
+
+    }
+
+    private fun llenarDetalle(view: View?, recorrido: Recorrido) {
+
+        val localizador = Geocoder(requireContext())
+
+        var direccionOrigen : List<Address>
+        var direccionDestino : List<Address>
+
+        direccionOrigen = ArrayList()
+        direccionDestino = ArrayList()
+
+        direccionOrigen = localizador.getFromLocation(recorrido.origenLatitud.toDouble(), recorrido.origenLongitud.toDouble(),1)
+        direccionDestino = localizador.getFromLocation(recorrido.destinoLatitud.toDouble(), recorrido.destinoLongitud.toDouble(),1)
+
+        if(view!=null){
+
+            var txtOrigen:TextView = view.findViewById(R.id.txt_origen_input)
+            var txtDestino:TextView = view.findViewById(R.id.txt_destino_input)
+            var txtDistancia:TextView = view.findViewById(R.id.txt_distancia_input)
+            var txtFecha:TextView = view.findViewById(R.id.txt_fecha_input)
+            var txtCoductor:TextView = view.findViewById(R.id.txt_conductor_input)
+            var txtMetodoPago:TextView = view.findViewById(R.id.txt_metodo_pago_input)
+            var txtCostoViaje:TextView = view.findViewById(R.id.txt_costo_viaje)
+
+            txtOrigen.text = direccionOrigen[0].getAddressLine(0)
+            txtDestino.text = direccionDestino[0].getAddressLine(0)
+            txtDistancia.text = String.format("%.2f",recorrido.distanciaRecorrido)
+            txtFecha.text = recorrido.fechaRecorrido
+            txtCoductor.text = "To do"
+            txtMetodoPago.text = "To do"
+            txtCostoViaje.text = String.format("%.3f",recorrido.valorRecorrido)
+
+
+
+
+
+
+
+        }
+
 
     }
 
@@ -94,7 +157,7 @@ class PendientesFragment : Fragment() {
 
 
         //Supongamos que el resultado de los recorridos son los objetos de abajo
-        listaRecorridos.add(Recorrido(-1, "-155.55896892", "-155.55896892",
+        listaRecorridos.add(Recorrido(-1, "-0.2033062", "-78.49077559999999",
                 "-0.2033062",
                 "-78.49077559999999",
                 10.123,
@@ -111,7 +174,7 @@ class PendientesFragment : Fragment() {
                 "-78.49077559999999",
                 6.123,
                 false,
-                "06/08/1996",
+                "06/08/1997",
                 6.123,
                 1,
                 1,
@@ -123,7 +186,7 @@ class PendientesFragment : Fragment() {
                 "-78.49077559999999",
                 6.123,
                 false,
-                "06/08/1996",
+                "06/08/1998",
                 6.123,
                 1,
                 1,
