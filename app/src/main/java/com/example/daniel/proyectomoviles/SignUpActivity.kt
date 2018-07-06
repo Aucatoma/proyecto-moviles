@@ -69,10 +69,10 @@ class SignUpActivity : AppCompatActivity() {
         if(requestCode == LoginActivity.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
             async(UI){
                 val imageRotated: Deferred<Boolean> = bg{
-                    imageHandler.rotateImageFile(File(imagePath))
+                    ImageFileHandler.rotateImageFile(File(imagePath))
                 }
                 if(imageRotated.await()){
-                    imageBitmap = imageHandler.fileToBitmap(File(imagePath))
+                    imageBitmap = ImageFileHandler.fileToBitmap(File(imagePath))
                     imgView_user_photo.setImageBitmap(imageBitmap)
                 }
             }
@@ -107,7 +107,7 @@ class SignUpActivity : AppCompatActivity() {
         val email = editText_signUp_email.text.toString()
         val username = editText_signUp_username.text.toString()
         val password = Hash.stringHash("SHA-512", editText_signUp_password.text.toString())
-        val foto = Foto(-1, imageHandler.bitmapToB64String(imageBitmap), "jpg", 0, 0)
+        val foto = Foto(-1, ImageFileHandler.bitmapToB64String(imageBitmap), "jpg", 0, 0)
 
         return Cliente(-1, nombre, apellido, telefono, username, password, email, null, foto, 0.toLong(), 0.toLong())
     }

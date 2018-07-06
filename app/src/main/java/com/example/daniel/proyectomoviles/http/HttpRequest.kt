@@ -54,6 +54,32 @@ class HttpRequest {
 
         }
 
+        fun userVerify(username: String, callback: (error: Boolean, datos: String) -> Any){
+            var error = false
+            var datos = ""
+            val jsonBody = """
+                {
+                "username":"$username"
+                }""".trimIndent()
+            val request = "$uriBase/cliente/verify".httpPost()
+            request.header(Pair("Content-Type", "application/json"))
+            request.body(jsonBody)
+            request.responseString{ request, response, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        Log.i("HTTP_FUEL_ERROR", "${result.getException()} \n ${result.error.response}")
+                        error = true
+                        callback(error, datos)
+                    }
+                    is Result.Success -> {
+                        datos = result.get()
+                        callback(error, datos)
+                    }
+                }
+            }
+
+        }
+
         fun registrarCliente(cliente: String, foto: String, callback: (error: Boolean, datos: String) -> Any){
             var error = false
             var datos = ""

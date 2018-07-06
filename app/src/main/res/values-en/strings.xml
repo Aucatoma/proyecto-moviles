@@ -50,6 +50,13 @@
     <string name="login_password">Password</string>
     <string name="login_sign_in">Sign In</string>
 
+    <!-- Login Fragment -->
+    <string name="sign_up_question">Have not signed up yet?</string>
+    <string name="sign_up_error_feedback">Something went wrong, please try again.</string>
+
+    <!-- Auth Fragment -->
+    <string name="sign_up_face">Face recognition</string>
+
     <!-- String para registro -->
     <string name="sign_up_name">First name</string>
     <string name="sign_up_last_name">Last name</string>

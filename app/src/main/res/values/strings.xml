@@ -51,6 +51,13 @@
     <string name="login_password">Contraseña</string>
     <string name="login_sign_in">Entrar</string>
 
+    <!-- Login Fragment -->
+    <string name="sign_up_question">¿No tienes una cuenta?</string>
+    <string name="sign_up_error_feedback">Hubo un error, intenta de nuevo por favor.</string>
+
+    <!-- Auth Fragment -->
+    <string name="sign_up_face">Reconocimiento facial</string>
+
     <!-- String para registro -->
     <string name="sign_up_name">Nombre</string>
     <string name="sign_up_last_name">Apellido</string>
