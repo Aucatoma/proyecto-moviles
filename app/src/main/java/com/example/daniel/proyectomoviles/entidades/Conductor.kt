@@ -10,9 +10,9 @@ class Conductor(val id:Int,
                 val nombreUsuario:String,
                 val contraseniaUsuario:String,
                 val correoUsuario:String,
-                val recorridos: List<Recorrido>?,
-                val autos:List<Auto>,
-                val fotoId: Int,
+                val recorridos: List<Recorrido>? = null,
+                val autos:List<Auto>? = null,
+                val fotoId: Int = 0,
                 val createdAt: Long,
                 val updatedAt:Long) : Parcelable  {
 
@@ -42,7 +42,7 @@ class Conductor(val id:Int,
         parcel.writeString(correoUsuario)
         parcel.writeTypedList(recorridos)
         parcel.writeTypedList(autos)
-        parcel.writeInt(fotoId)
+        parcel.writeInt(fotoId as Int)
         parcel.writeLong(createdAt)
         parcel.writeLong(updatedAt)
     }

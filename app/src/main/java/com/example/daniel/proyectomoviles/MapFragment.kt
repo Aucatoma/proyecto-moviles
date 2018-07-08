@@ -243,16 +243,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun crearRecorrido(): Recorrido {
 
         return Recorrido(-1,
-                coordenadasOrigen[0],
-                coordenadasOrigen[1],
-                coordenadasDestino[0],
-                coordenadasDestino[1],
+                coordenadasOrigen[0].toDouble(),
+                coordenadasOrigen[1].toDouble(),
+                coordenadasDestino[0].toDouble(),
+                coordenadasDestino[1].toDouble(),
                 distancia,
-                false,
+                "P",
                 Date().toString(),
                 valorRecorrido,
                 -1,
-                -1,
+                null,
                 0.toLong(),
                 0.toLong()
 

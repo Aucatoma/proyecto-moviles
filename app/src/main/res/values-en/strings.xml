@@ -52,10 +52,12 @@
 
     <!-- Login Fragment -->
     <string name="sign_up_question">Have not signed up yet?</string>
-    <string name="sign_up_error_feedback">Something went wrong, please try again.</string>
+    <string name="sign_in_error_feedback">Something went wrong, please try again.</string>
 
     <!-- Auth Fragment -->
-    <string name="sign_up_face">Face recognition</string>
+    <string name="sign_in_face">Face recognition</string>
+    <string name="sign_in_auth_error_feedback">@string/sign_in_error_feedback</string>
+    <string name="sign_in_auth_logged">Welcome %1$s!</string>
 
     <!-- String para registro -->
     <string name="sign_up_name">First name</string>

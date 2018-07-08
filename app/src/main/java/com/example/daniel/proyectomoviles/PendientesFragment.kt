@@ -157,39 +157,39 @@ class PendientesFragment : Fragment() {
 
 
         //Supongamos que el resultado de los recorridos son los objetos de abajo
-        listaRecorridos.add(Recorrido(-1, "-0.2033062", "-78.49077559999999",
-                "-0.2033062",
-                "-78.49077559999999",
+        listaRecorridos.add(Recorrido(-1, -0.2033062, -78.49077559999999,
+                -0.2033062,
+                -78.49077559999999,
                 10.123,
-                false,
+                "P",
                 "06/08/1996",
                 6.123,
                 1,
-                1,
+                null,
                 0,
                 0))
 
-        listaRecorridos.add(Recorrido(-1, "-0.2033062", "-78.49077559999999",
-                "-0.2033062",
-                "-78.49077559999999",
+        listaRecorridos.add(Recorrido(-1, -0.2033062, -78.49077559999999,
+                -0.2033062,
+                -78.49077559999999,
                 6.123,
-                false,
+                "P",
                 "06/08/1997",
                 6.123,
                 1,
-                1,
+                null,
                 0,
                 0))
 
-        listaRecorridos.add(Recorrido(-1, "-0.2033062", "-78.49077559999999",
-                "-0.2033062",
-                "-78.49077559999999",
+        listaRecorridos.add(Recorrido(-1, -0.2033062, -78.49077559999999,
+                -0.2033062,
+                -78.49077559999999,
                 6.123,
-                false,
+                "P",
                 "06/08/1998",
                 6.123,
                 1,
-                1,
+                null,
                 0,
                 0))
 
@@ -202,7 +202,7 @@ class PendientesFragment : Fragment() {
         listaRecorridos.forEach { recorrido:Recorrido ->
 
             //Y añadimos solo los pendientes
-            if(!recorrido.estadoRecorrido){
+            if(recorrido.estadoRecorrido.equals("P")){
                 listaPendientes.add(recorrido)
             }
 

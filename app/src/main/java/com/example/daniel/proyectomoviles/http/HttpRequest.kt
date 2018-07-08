@@ -15,7 +15,7 @@ class HttpRequest {
         val puerto = "1337"
         val uriBase = "http://$direcccionIP:$puerto"
 
-        fun login(username: String, password: String = "", foto: String = "", callback: (error: Boolean, datos: String) -> Any){
+        fun authentication(username: String, password: String = "", foto: String = "", callback: (error: Boolean, datos: String) -> Any){
             Log.i("LOGIN_USER", "Haciendo login")
             var error = false
             var datos = ""
@@ -35,7 +35,7 @@ class HttpRequest {
                             }""".trimIndent().trim()
             }
 
-            val request = "$uriBase/cliente/login".httpPost()
+            val request = "$uriBase/cliente/authentication".httpPost()
             request.header(Pair("Content-Type", "application/json"))
             request.body(jsonBody)
             request.responseString{ request, response, result ->
@@ -52,6 +52,14 @@ class HttpRequest {
                 }
             }
 
+        }
+
+        fun pedirConductores(conductoresId: Array<Int>, callback: (error: Boolean, datos: String) -> Any){
+            var error = false
+            var datos = ""
+            val jsonBody = """
+
+            """.trimIndent()
         }
 
         fun userVerify(username: String, callback: (error: Boolean, datos: String) -> Any){

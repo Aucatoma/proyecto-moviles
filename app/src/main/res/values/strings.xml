@@ -53,10 +53,12 @@
 
     <!-- Login Fragment -->
     <string name="sign_up_question">¿No tienes una cuenta?</string>
-    <string name="sign_up_error_feedback">Hubo un error, intenta de nuevo por favor.</string>
+    <string name="sign_in_error_feedback">Hubo un error, intenta de nuevo por favor.</string>
 
     <!-- Auth Fragment -->
-    <string name="sign_up_face">Reconocimiento facial</string>
+    <string name="sign_in_face">Reconocimiento facial</string>
+    <string name="sign_in_auth_error_feedback">@string/sign_in_error_feedback</string>
+    <string name="sign_in_auth_logged">Bienvenido %1$s!</string>
 
     <!-- String para registro -->
     <string name="sign_up_name">Nombre</string>

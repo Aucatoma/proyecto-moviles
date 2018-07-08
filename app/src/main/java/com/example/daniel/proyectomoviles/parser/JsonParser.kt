@@ -49,7 +49,7 @@ class JsonParser {
             "fechaRecorrido":"${recorrido.fechaRecorrido}",
             "valorRecorrido":"${recorrido.valorRecorrido}",
             "tarjetaCreditoId":"${recorrido.tarjetaCreditoId}",
-            "conductorId":"${recorrido.conductorId}",
+            "conductorId":"${recorrido.conductor}",
             "createdAt":"${recorrido.createdAt}",
             "updatedAt":"${recorrido.updatedAt}",
             }""".trimIndent()

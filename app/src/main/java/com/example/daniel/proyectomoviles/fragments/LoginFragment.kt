@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
             username = editText_login_username.text.toString()
             HttpRequest.userVerify(username, { error, datos ->
                 if(error) {
-                    textView_frag_login_feed.text = resources.getString(R.string.sign_up_error_feedback)
+                    textView_frag_login_feed.text = resources.getString(R.string.sign_in_error_feedback)
                 }else {
                     textView_frag_login_feed.text = ""
                     mListener.onNextClicked(username)

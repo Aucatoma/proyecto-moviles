@@ -16,7 +16,7 @@ class ImageFileHandler {
         val flags = Base64.URL_SAFE or Base64.NO_WRAP
 
         /* Rotar la imagen del archivo y sobreescribir el mismo */
-        fun rotateImageFile(file: File): Boolean{
+        fun rotateImageFile(file: File){
             val bitmap = fileToBitmap(file) // file a bitmap
             val exifInterface = ExifInterface(file.path) // leer los metadatos
             val rotation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL) // leer la rotación
@@ -27,7 +27,16 @@ class ImageFileHandler {
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos) // hacer del bitmap un jpg y guardar los bytes en 'baos'
 
             writeFile(file, baos.toByteArray()) // guardar los bytes en el archivo
-            return true
+        }
+
+        fun base64FromFileRotation(file: File): String{
+            rotateImageFile(file)
+            return bitmapToB64String(fileToBitmap(file))
+        }
+
+        fun bitmapFromFileRotation(file: File): Bitmap{
+            rotateImageFile(file)
+            return fileToBitmap(file)
         }
 
         /* Leer archivo y generar un bitmap */

@@ -9,12 +9,13 @@ class Cliente (val id:Int,
                val apellido:String,
                val telefono:String,
                val nombreUsuario:String,
-               val contraseniaUsuario:String,
+               val contraseniaUsuario:String = "",
                val correoUsuario:String,
-               val tarjetasDeCredito: List<TarjetaCredito>?,
-               val foto: Foto,
-               val createdAt: Long,
-               val updatedAt:Long) : Parcelable {
+               val tarjetasDeCredito: List<TarjetaCredito>? = null,
+               val foto: Foto? = null,
+               val jwt: String = "",
+               val createdAt: Long = 0,
+               val updatedAt:Long = 0) : Parcelable {
 
 
     constructor(parcel: Parcel) : this(
@@ -27,6 +28,7 @@ class Cliente (val id:Int,
             parcel.readString(),
             parcel.createTypedArrayList(TarjetaCredito),
             parcel.readParcelable(Foto.javaClass.classLoader),
+            parcel.readString(),
             parcel.readLong(),
             parcel.readLong()) {
     }
@@ -41,6 +43,7 @@ class Cliente (val id:Int,
         parcel.writeString(correoUsuario)
         parcel.writeTypedList(tarjetasDeCredito)
         parcel.writeParcelable(foto, flags)
+        parcel.writeString(jwt)
         parcel.writeLong(createdAt)
         parcel.writeLong(updatedAt)
     }
@@ -69,10 +72,10 @@ class Cliente (val id:Int,
             $contraseniaUsuario
             $createdAt
             $updatedAt
-            ${foto.id}
-            ${foto.datos}
-            ${foto.extension}
+            ${foto!!.id}
+            ${foto!!.extension}
             ${tarjetasDeCredito!!.size}
+            ${tarjetasDeCredito[0].recorridos!![0].conductor!!.nombre}
             """
     }
 

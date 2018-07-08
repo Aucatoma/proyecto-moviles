@@ -34,6 +34,10 @@ class SignUpActivity : AppCompatActivity() {
     val imageHandler = ImageFileHandler()
     private val jsonParser = JsonParser()
 
+    companion object {
+        val REQUEST_IMAGE_CAPTURE = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -48,7 +52,7 @@ class SignUpActivity : AppCompatActivity() {
                     crearCliente()
                 }
                 val clienteSync = cliente.await()
-                val fotoJson = jsonParser.fotoToJson(clienteSync.foto)
+                val fotoJson = jsonParser.fotoToJson(clienteSync.foto as Foto)
                 val clienteJson = jsonParser.clienteToJson(clienteSync)
                 Log.i("CLIENTE_CREADO", cliente.await().nombre)
                 HttpRequest.registrarCliente(clienteJson, fotoJson, { error, datos ->
@@ -66,15 +70,12 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == LoginActivity.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
             async(UI){
-                val imageRotated: Deferred<Boolean> = bg{
-                    ImageFileHandler.rotateImageFile(File(imagePath))
+                val imageRotated: Deferred<Bitmap> = bg{
+                    ImageFileHandler.bitmapFromFileRotation(File(imagePath))
                 }
-                if(imageRotated.await()){
-                    imageBitmap = ImageFileHandler.fileToBitmap(File(imagePath))
-                    imgView_user_photo.setImageBitmap(imageBitmap)
-                }
+                    imgView_user_photo.setImageBitmap(imageRotated.await())
             }
         }
     }
@@ -86,6 +87,7 @@ class SignUpActivity : AppCompatActivity() {
         return File.createTempFile(filename, extension, storageDir)
     }
 
+
     fun tomarFotoIntent(file: File){
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         imagePath = file.absolutePath
@@ -96,7 +98,7 @@ class SignUpActivity : AppCompatActivity() {
         )
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         if(intent.resolveActivity(packageManager) != null){
-            startActivityForResult(intent, LoginActivity.REQUEST_IMAGE_CAPTURE)
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
         }
     }
 
@@ -109,6 +111,6 @@ class SignUpActivity : AppCompatActivity() {
         val password = Hash.stringHash("SHA-512", editText_signUp_password.text.toString())
         val foto = Foto(-1, ImageFileHandler.bitmapToB64String(imageBitmap), "jpg", 0, 0)
 
-        return Cliente(-1, nombre, apellido, telefono, username, password, email, null, foto, 0.toLong(), 0.toLong())
+        return Cliente(-1, nombre, apellido, telefono, username, password, email, null, foto, "",0.toLong(), 0.toLong())
     }
 }

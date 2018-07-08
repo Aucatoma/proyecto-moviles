@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.widget.Toast
+import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaCliente
 import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.fragments.AuthFragment
 import com.example.daniel.proyectomoviles.fragments.LoginFragment
@@ -23,8 +25,8 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
 
     companion object {
         val PERMISSIONS_REQUEST = 1
+
     }
-    val jsonParser = JsonParser()
     val verificadorIntennet = VerificadorInternet()
     val permisos = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -35,27 +37,37 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.CAMERA)
 
-    var cliente: Cliente? = null
     val fragmentManager = supportFragmentManager
 
     override fun onNextClicked(username: String) {
-        val fragmento2 = AuthFragment()
+        val fragAuth = AuthFragment()
+        val bundle = Bundle()
+        bundle.putString("USERNAME", username)
+        fragAuth.arguments = bundle
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(
                 R.animator.fragment_slide_left_enter,
                 R.animator.fragment_slide_left_exit,
                 R.animator.fragment_slide_right_enter,
                 R.animator.fragment_slide_right_exit)
-        fragmentTransaction.replace(R.id.rel_main, fragmento2)
+        fragmentTransaction.replace(R.id.rel_main, fragAuth)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val cliente = DBHandler.getInstance(this.baseContext)!!.obtenerUno(TablaCliente.TABLE_NAME) as Cliente?
+        if(cliente != null){
+            Log.i("CLIENTE", cliente.nombre)
+            //irActividadPanel()
+        }
 
         val fragmentoLogin = LoginFragment()
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -84,6 +96,11 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
        return permissions.dropWhile { permissions: String ->
             ActivityCompat.checkSelfPermission(this, permissions) == PackageManager.PERMISSION_GRANTED
        }
+    }
+
+    private fun irActividadPanel(){
+        val intent = Intent(this, PanelActivity::class.java)
+        startActivity(intent)
     }
 
     private fun irAActividadMapa() {

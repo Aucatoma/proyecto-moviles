@@ -4,47 +4,47 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Recorrido (val id:Int,
-                 val origenLatitud:String,
-                 val origenLongitud:String,
-                 val destinoLatitud:String,
-                 val destinoLongitud:String,
+                 val origenLatitud:Double,
+                 val origenLongitud:Double,
+                 val destinoLatitud:Double,
+                 val destinoLongitud:Double,
                  val distanciaRecorrido: Double,
-                 val estadoRecorrido: Boolean,
+                 val estadoRecorrido: String,
                  val fechaRecorrido: String,
                  val valorRecorrido: Double,
                  val tarjetaCreditoId:Int,
-                 val conductorId:Int,
+                 val conductor:Conductor?,
                  val createdAt:Long,
                  val updatedAt:Long) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
+            parcel.readDouble(),
+            parcel.readDouble(),
+            parcel.readDouble(),
+            parcel.readDouble(),
+            parcel.readDouble(),
             parcel.readString(),
             parcel.readString(),
             parcel.readDouble(),
-            parcel.readByte() != 0.toByte(),
-            parcel.readString(),
-            parcel.readDouble(),
             parcel.readInt(),
-            parcel.readInt(),
+            parcel.readParcelable(Conductor.javaClass.classLoader),
             parcel.readLong(),
             parcel.readLong()) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
-        parcel.writeString(origenLatitud)
-        parcel.writeString(origenLongitud)
-        parcel.writeString(destinoLatitud)
-        parcel.writeString(destinoLongitud)
+        parcel.writeDouble(origenLatitud)
+        parcel.writeDouble(origenLongitud)
+        parcel.writeDouble(destinoLatitud)
+        parcel.writeDouble(destinoLongitud)
         parcel.writeDouble(distanciaRecorrido)
-        parcel.writeByte(if (estadoRecorrido) 1 else 0)
+        parcel.writeString(estadoRecorrido)
         parcel.writeString(fechaRecorrido)
         parcel.writeDouble(valorRecorrido)
         parcel.writeInt(tarjetaCreditoId)
-        parcel.writeInt(conductorId)
+        parcel.writeParcelable(conductor, flags)
         parcel.writeLong(createdAt)
         parcel.writeLong(updatedAt)
     }
