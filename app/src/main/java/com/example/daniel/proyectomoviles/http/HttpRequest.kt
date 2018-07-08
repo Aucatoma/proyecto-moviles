@@ -16,11 +16,11 @@ class HttpRequest {
         val uriBase = "http://$direcccionIP:$puerto"
 
         fun authentication(username: String, password: String = "", foto: String = "", callback: (error: Boolean, datos: String) -> Any){
-            Log.i("LOGIN_USER", "Haciendo login")
             var error = false
             var datos = ""
             var jsonBody = ""
             if(!password.equals("")){
+                Log.i("LOGIN_USE", "PASSWORD")
                 jsonBody =
                         """{
                             "username": "$username",
@@ -28,6 +28,7 @@ class HttpRequest {
                             }""".trimIndent().trim()
             }
             if(!foto.equals("")) {
+                Log.i("LOGIN_USE", "IMAGE")
                 jsonBody =
                         """{
                             "username": "$username",
@@ -52,14 +53,6 @@ class HttpRequest {
                 }
             }
 
-        }
-
-        fun pedirConductores(conductoresId: Array<Int>, callback: (error: Boolean, datos: String) -> Any){
-            var error = false
-            var datos = ""
-            val jsonBody = """
-
-            """.trimIndent()
         }
 
         fun userVerify(username: String, callback: (error: Boolean, datos: String) -> Any){

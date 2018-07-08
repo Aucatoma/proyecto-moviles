@@ -66,7 +66,8 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
         val cliente = DBHandler.getInstance(this.baseContext)!!.obtenerUno(TablaCliente.TABLE_NAME) as Cliente?
         if(cliente != null){
             Log.i("CLIENTE", cliente.nombre)
-            //irActividadPanel()
+            irActividadPanel()
+            finish()
         }
 
         val fragmentoLogin = LoginFragment()
@@ -79,13 +80,10 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
         fragmentTransaction.replace(R.id.rel_main, fragmentoLogin)
         fragmentTransaction.commit()
 
-
-
-        Log.i("#_PERMISOS", "${permisos.size}")
         val permisosApedir = checkPermissions(permisos)
-        Log.i("#_PERMISOS", "${permisosApedir.size} - ${permisosApedir.last()}")
+
         if(permisosApedir.isNotEmpty()){
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSIONS_REQUEST )
+            ActivityCompat.requestPermissions(this, permisosApedir.toTypedArray(), PERMISSIONS_REQUEST )
         }
 
     }
