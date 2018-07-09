@@ -58,6 +58,8 @@
     <!-- Auth Fragment -->
     <string name="sign_in_face">Reconocimiento facial</string>
     <string name="sign_in_auth_error_feedback">@string/sign_in_error_feedback</string>
+    <string name="sign_in_auth_logged_success">Inicio de sesión exitoso!</string>
+    <string name="sign_in_auth_logging_in">Comprobando datos...</string>
     <string name="sign_in_auth_logged">Bienvenido %1$s!</string>
 
     <!-- String para registro -->
@@ -68,6 +70,9 @@
     <string name="sign_up_password">@string/login_password</string>
     <string name="sign_up_email">Correo electrónico</string>
     <string name="sign_up_btn">Registrarse</string>
+    <string name="signed_up">Registrado exitosamente!</string>
+    <string name="sign_up_error_feedback">@string/sign_in_error_feedback</string>
+    <string name="sign_up_field_error">Hay campos vacíos</string>
 
     <!--Strings de RV Pendientes-->
     <string name="boton_ver_mas">Más</string>

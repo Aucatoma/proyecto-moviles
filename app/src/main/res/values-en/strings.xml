@@ -51,13 +51,15 @@
     <string name="login_sign_in">Sign In</string>
 
     <!-- Login Fragment -->
-    <string name="sign_up_question">Have not signed up yet?</string>
+    <string name="sign_up_question">Haven\'t signed up yet?</string>
     <string name="sign_in_error_feedback">Something went wrong, please try again.</string>
 
     <!-- Auth Fragment -->
     <string name="sign_in_face">Face recognition</string>
     <string name="sign_in_auth_error_feedback">@string/sign_in_error_feedback</string>
     <string name="sign_in_auth_logged">Welcome %1$s!</string>
+    <string name="sign_in_auth_logged_success">Successfully logged in!</string>
+    <string name="sign_in_auth_logging_in">Checking data...</string>
 
     <!-- String para registro -->
     <string name="sign_up_name">First name</string>
@@ -67,6 +69,9 @@
     <string name="sign_up_password">@string/login_password</string>
     <string name="sign_up_email">E-mail</string>
     <string name="sign_up_btn">Sign Up</string>
+    <string name="signed_up">Signed up successfully!</string>
+    <string name="sign_up_error_feedback">@string/sign_in_error_feedback</string>
+    <string name="sign_up_field_error">Some fields are empty</string>
 
 
 </resources>

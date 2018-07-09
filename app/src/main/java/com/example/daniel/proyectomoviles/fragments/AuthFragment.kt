@@ -49,6 +49,7 @@ class AuthFragment : Fragment() {
     var password: String = ""
     val jsonParser = JsonParser()
     lateinit var imm: InputMethodManager
+    var logging_in = false
 
     companion object {
         val REQUEST_IMAGE_CAPTURE = 1
@@ -87,10 +88,17 @@ class AuthFragment : Fragment() {
         }
 
         imgBtn_frag_auth_next.setOnClickListener { v: View? ->
-            imm.hideSoftInputFromWindow(editText_frag_auth_password.windowToken, 0)
-            progressBar_frag_auth.visibility = View.VISIBLE
-            password = Hash.stringHash("SHA-512", editText_frag_auth_password.text.toString())
-            realizarAutenticacion(password = password)
+            if(!logging_in) {
+                imm.hideSoftInputFromWindow(editText_frag_auth_password.windowToken, 0)
+                textView_frag_auth_feed.text = ""
+                logging_in = true
+                Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logging_in), Toast.LENGTH_SHORT).show()
+                progressBar_frag_auth.visibility = View.VISIBLE
+                password = Hash.stringHash("SHA-512", editText_frag_auth_password.text.toString())
+                realizarAutenticacion(password = password)
+            }else{
+                Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logging_in), Toast.LENGTH_SHORT).show()
+            }
         }
 
         btn_facial_recognition.setOnClickListener{
@@ -100,12 +108,19 @@ class AuthFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
-            progressBar_frag_auth.visibility = View.VISIBLE
-            async(UI){
-                val imageRotated: Deferred<String> = bg{
-                    ImageFileHandler.base64FromFileRotation(File(imagePath))
+            if(!logging_in){
+                logging_in = true
+                textView_frag_auth_feed.text = ""
+                Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logging_in), Toast.LENGTH_SHORT).show()
+                progressBar_frag_auth.visibility = View.VISIBLE
+                async(UI){
+                    val imageRotated: Deferred<String> = bg{
+                        ImageFileHandler.base64FromFileRotation(File(imagePath))
+                    }
+                    realizarAutenticacion(imageBase64 = imageRotated.await())
                 }
-                realizarAutenticacion(imageBase64 = imageRotated.await())
+            }else{
+                Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logging_in), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -137,7 +152,6 @@ class AuthFragment : Fragment() {
     }
 
     fun guardarDatosEnBD(cliente: Cliente){
-        /*Foto cliente conductor tarjeta Recorrido*/
         DBHandler.getInstance(activity!!.baseContext)!!.insertar(cliente.foto as Foto)
         DBHandler.getInstance(activity!!.baseContext)!!.insertar(cliente)
         cliente.tarjetasDeCredito!!.forEach { tarjetaCredito: TarjetaCredito ->
@@ -149,16 +163,15 @@ class AuthFragment : Fragment() {
         }
 
         Toast.makeText(activity!!.baseContext, String.format(activity!!.resources.getString(R.string.sign_in_auth_logged), cliente.nombre +" "+ cliente.apellido), Toast.LENGTH_LONG).show()
-       // ImageFileHandler.writeFile( createImageFile("JPEG_RECV_", Environment.DIRECTORY_PICTURES, ".jpg"), Base64.decode(cliente.foto.datos, Base64.URL_SAFE or Base64.NO_WRAP))
         irActividadPanel()
         activity!!.finish()
     }
 
     fun realizarAutenticacion(password: String = "", imageBase64: String = ""){
         if(password.equals("")){
-            HttpRequest.authentication(username, foto = imageBase64, callback = ::callbackHttpRequest)
+            bg{HttpRequest.authentication(username, foto = imageBase64, callback = ::callbackHttpRequest)}
         }else{
-            HttpRequest.authentication(username, password = password, callback = ::callbackHttpRequest)
+            bg{HttpRequest.authentication(username, password = password, callback = ::callbackHttpRequest)}
         }
     }
 
@@ -166,7 +179,10 @@ class AuthFragment : Fragment() {
         progressBar_frag_auth.visibility = View.GONE
         if(error){
             textView_frag_auth_feed.text = resources.getString(R.string.sign_in_auth_error_feedback)
+            logging_in = false
         }else{
+            textView_frag_auth_feed.text = ""
+            Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logged_success), Toast.LENGTH_LONG).show()
             async(UI) {
                 val cliente: Deferred<Cliente?> = bg {
                     jsonParser.jsonToCliente(datos)

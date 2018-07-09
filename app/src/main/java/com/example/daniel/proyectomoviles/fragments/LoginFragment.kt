@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,11 +36,13 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         imgBtn_frag_login_next.setOnClickListener {
             imm.hideSoftInputFromWindow(editText_login_username.windowToken, 0)
+            textView_frag_login_feed.text = ""
             username = editText_login_username.text.toString()
             HttpRequest.userVerify(username, { error, datos ->
                 if(error) {
                     textView_frag_login_feed.text = resources.getString(R.string.sign_in_error_feedback)
                 }else {
+                    Log.i("LOGIN_USER", datos)
                     textView_frag_login_feed.text = ""
                     mListener.onNextClicked(username)
                 }
