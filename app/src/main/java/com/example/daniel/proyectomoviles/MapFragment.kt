@@ -97,7 +97,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val verificadorIntenet = VerificadorInternet()
     var hayConexion = true
 
-    val ZOOM_LEVEL = 12f
+    val ZOOM_LEVEL = 15f
 
     //Declaramos un objeto bounds para que toda la ruta que se dibuje quepa en la pantalla
     val LatLongB = LatLngBounds.Builder()
@@ -451,35 +451,37 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 //Ahora tenemos nuestro objeto JSON, y necesitamos encontrar los puntos para formar la ruta.
                 val routes = json.array<JsonObject>("routes")
-                val points = routes!!["legs"]["steps"][0] as JsonArray<JsonObject>
 
-                val polypts = points.flatMap {
-                    decodePoly(it.obj("polyline")?.string("points")!!)
+                if(routes!!.size!=0){
+                    val points = routes!!["legs"]["steps"][0] as JsonArray<JsonObject>
+                    val polypts = points.flatMap {
+                        decodePoly(it.obj("polyline")?.string("points")!!)
+                    }
+
+                    //Se añade el origen a nuestro PolyLineOptions y a nuestro objeto bounds
+                    options.add(LatLng(coordenadasOrigen[0].toDouble(),coordenadasOrigen[1].toDouble()))
+                    LatLongB.include(LatLng(coordenadasOrigen[0].toDouble(),coordenadasOrigen[1].toDouble()))
+
+                    //Se añade nuestro conjunto de puntos desde el origen al destino a nuestro PolyLine y nuetro bounds
+                    for (point in polypts){
+
+                        options.add(point)
+                        LatLongB.include(point)
+
+                    }
+
+                    //Y finalmente se añade el destino a nuestro Polyline y a nuestro bounds
+                    options.add(LatLng(coordenadasDestino[0].toDouble(),coordenadasDestino[1].toDouble()))
+                    LatLongB.include(LatLng(coordenadasDestino[0].toDouble(),coordenadasDestino[1].toDouble()))
+
+                    mMap.addPolyline(options)
+
+                    //Se construye nuestro bounds
+                    val bounds = LatLongB.build()
+
+                    //Centramos la ruta en la pantalla usando nuestro bounds construido
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,100))
                 }
-
-                //Se añade el origen a nuestro PolyLineOptions y a nuestro objeto bounds
-                options.add(LatLng(coordenadasOrigen[0].toDouble(),coordenadasOrigen[1].toDouble()))
-                LatLongB.include(LatLng(coordenadasOrigen[0].toDouble(),coordenadasOrigen[1].toDouble()))
-
-                //Se añade nuestro conjunto de puntos desde el origen al destino a nuestro PolyLine y nuetro bounds
-                for (point in polypts){
-
-                    options.add(point)
-                    LatLongB.include(point)
-
-                }
-
-                //Y finalmente se añade el destino a nuestro Polyline y a nuestro bounds
-                options.add(LatLng(coordenadasDestino[0].toDouble(),coordenadasDestino[1].toDouble()))
-                LatLongB.include(LatLng(coordenadasDestino[0].toDouble(),coordenadasDestino[1].toDouble()))
-
-                mMap.addPolyline(options)
-
-                //Se construye nuestro bounds
-                val bounds = LatLongB.build()
-
-                //Centramos la ruta en la pantalla usando nuestro bounds construido
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,100))
 
                 //Calculamos distancia entre los dos puntos
                 calcularDistancia(coordenadasOrigen,coordenadasDestino)
