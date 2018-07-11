@@ -176,6 +176,8 @@ class HttpRequest {
             var datos = ""
             val request = "$uriBase/$modelo".httpPost()
             request.header(Pair("Content-Type", "application/json"))
+            request.body(data)
+            Log.i("RESPUESTA_REGISTRO", data)
             request.responseString { request, response, result ->
                 when (result) {
                     is Result.Failure -> {

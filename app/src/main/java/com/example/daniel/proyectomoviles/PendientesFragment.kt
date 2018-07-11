@@ -114,8 +114,8 @@ class PendientesFragment : Fragment() {
         direccionOrigen = ArrayList()
         direccionDestino = ArrayList()
 
-        direccionOrigen = localizador.getFromLocation(recorrido.origenLatitud.toDouble(), recorrido.origenLongitud.toDouble(),1)
-        direccionDestino = localizador.getFromLocation(recorrido.destinoLatitud.toDouble(), recorrido.destinoLongitud.toDouble(),1)
+        direccionOrigen = localizador.getFromLocation(recorrido.origenLatitud, recorrido.origenLongitud,1)
+        direccionDestino = localizador.getFromLocation(recorrido.destinoLatitud, recorrido.destinoLongitud,1)
 
         if(view!=null){
 
@@ -135,12 +135,6 @@ class PendientesFragment : Fragment() {
             txtMetodoPago.text = "To do"
             txtCostoViaje.text = String.format("%.3f",recorrido.valorRecorrido)
 
-
-
-
-
-
-
         }
 
 
@@ -156,42 +150,9 @@ class PendientesFragment : Fragment() {
         //Aqui se consultaria todos los recorridos del cliente y lo meteria en la listaRecorridos
 
 
-        //Supongamos que el resultado de los recorridos son los objetos de abajo
-        listaRecorridos.add(Recorrido(-1, -0.2033062, -78.49077559999999,
-                -0.2033062,
-                -78.49077559999999,
-                10.123,
-                "P",
-                "06/08/1996",
-                6.123,
-                1,
-                null,
-                0,
-                0))
 
-        listaRecorridos.add(Recorrido(-1, -0.2033062, -78.49077559999999,
-                -0.2033062,
-                -78.49077559999999,
-                6.123,
-                "P",
-                "06/08/1997",
-                6.123,
-                1,
-                null,
-                0,
-                0))
 
-        listaRecorridos.add(Recorrido(-1, -0.2033062, -78.49077559999999,
-                -0.2033062,
-                -78.49077559999999,
-                6.123,
-                "P",
-                "06/08/1998",
-                6.123,
-                1,
-                null,
-                0,
-                0))
+
 
 
 
@@ -207,12 +168,6 @@ class PendientesFragment : Fragment() {
             }
 
         }
-
-
-
-
-
-
 
     }
 

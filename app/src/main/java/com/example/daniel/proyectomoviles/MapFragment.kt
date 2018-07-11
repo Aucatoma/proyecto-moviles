@@ -22,8 +22,8 @@ import com.beust.klaxon.Klaxon
 import com.beust.klaxon.Parser
 import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
 import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaCliente
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaTarjetaCredito
 import com.example.daniel.proyectomoviles.entidades.Cliente
-import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.entidades.Recorrido
 import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
 import com.example.daniel.proyectomoviles.http.HttpRequest
@@ -42,9 +42,11 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.custom.async
+import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
 import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.net.URL
+import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -55,7 +57,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     // implementation 'com.google.android.gms:play-services-location:15.0.1'
     //Para mas informacion ir a: https://developer.android.com/trainning/location/retrieve-current
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
 
     private lateinit var mMap: GoogleMap
     private lateinit var busqueda:EditText
@@ -70,11 +71,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var distancia = 0.0
     var valorRecorrido = 0.0
 
-    lateinit var recorrido: Deferred<Recorrido>
+    lateinit var recorridoCreado: Deferred<Boolean>
+    lateinit var recorrido:Recorrido
+    var recorridoJson = ""
     private val jsonParser = JsonParser()
     var tarjetasCredito:List<TarjetaCredito>? = ArrayList()
 
     //-----------------------------------------------------//
+
+
+    //Variable que guarda la tarjeta seleccionada en el spinner al momento de seleccionar la tarjeta en el pago
+    lateinit var tarjetaSeleccionada:TarjetaCredito
 
 
     var distanciaString = ""
@@ -97,11 +104,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     lateinit var inputMethodManager : InputMethodManager
 
-    lateinit var cliente:Cliente
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        val cliente = DBHandler.getInstance(requireContext())!!.obtenerUno(TablaCliente.TABLE_NAME) as Cliente?
+
+        if(cliente==null){
+            Log.i("MI-CLIENTE","Cliente nulo")
+        }else{
+            Log.i("MI-CLIENTE", cliente.nombre)
+        }
+
+
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
@@ -168,11 +183,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                             if(which.name=="POSITIVE"){
 
-                                //registrarRecorrido()
+                                registrarRecorrido()
 
-                                //Se iniciar el nuevo Fragment de los RV de Pendientes
-                                val pendientesFragment = PendientesFragment()
-                                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.mainLayout, pendientesFragment).addToBackStack(null).commit()
 
                             }else if (which.name=="NEGATIVE"){ }
 
@@ -199,14 +211,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun consultarTarjetasCredito() {
 
-     /*   HttpRequest.obtenerDatos("TarjetaCredito", { error, datos ->
-            if(error){
-
-            }else{
-                tarjetasCredito = Klaxon().parseArray(datos)
-            }
-        })*/
-
+        tarjetasCredito = DBHandler.getInstance(requireContext())!!.obtenerDatos(TablaTarjetaCredito.TABLE_NAME) as List<TarjetaCredito>
 
 
     }
@@ -215,7 +220,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val spinner:Spinner = view.findViewById(R.id.spinner_tarjetas)
 
-        val opcionesTarjetasSpinner:ArrayList<String>
+        val opcionesTarjetasSpinner:ArrayList<Any>
         opcionesTarjetasSpinner = ArrayList()
 
         if(tarjetasCredito?.size==0){
@@ -224,46 +229,97 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         }else{
             tarjetasCredito?.forEach { tarjetasCredito:TarjetaCredito ->
-                opcionesTarjetasSpinner.add(tarjetasCredito.toString())
+                opcionesTarjetasSpinner.add(tarjetasCredito)
             }
         }
 
-        val adaptadorSpinner = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_dropdown_item,opcionesTarjetasSpinner)
+        val adaptadorSpinner = ArrayAdapter<Any>(requireContext(),android.R.layout.simple_spinner_dropdown_item,opcionesTarjetasSpinner)
         adaptadorSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter=adaptadorSpinner
 
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //nada
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                tarjetaSeleccionada = opcionesTarjetasSpinner[position] as TarjetaCredito
+
+            }
+        }
     }
 
     private fun registrarRecorrido() {
 
         kotlinx.coroutines.experimental.async(UI) {
-            recorrido = bg {
+            recorridoCreado = bg {
                 crearRecorrido()
             }
-            val recorridoSync = recorrido.await()
-            val recorridoJson = jsonParser.recorridoToJson(recorridoSync)
+            if(recorridoCreado.await()){
+
+                bg {HttpRequest.insertarDato("Recorrido",recorridoJson,{ error, datos ->
+
+                    if(error){
+                        Toast.makeText(requireContext(),"Error", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Log.i("RESPUESTA_REGISTRO", datos)
+                        val recorridoRespuesta = jsonParser.jsonToRecorrido(datos)
+
+                        if(recorridoRespuesta?.conductor!=null && recorridoRespuesta.tarjetaCreditoId!=null){
+                            DBHandler.getInstance(requireContext())!!.insertar(recorridoRespuesta.conductor)
+                            DBHandler.getInstance(requireContext())!!.insertar(recorridoRespuesta!!)
+                            //Se inicia el nuevo Fragment de los RV de Pendientes
+                            val pendientesFragment = PendientesFragment()
+                            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.mainLayout, pendientesFragment).addToBackStack(null).commit()
+                        }
+
+
+
+                    }
+
+                })
+
+                }
+
+            }
         }
-        crearRecorrido()
+
 
     }
 
-    private fun crearRecorrido(): Recorrido {
+    private fun crearRecorrido(): Boolean {
 
-        return Recorrido(-1,
+        Log.i("FECHA", obtenerFechaActual())
+
+        recorrido = Recorrido(-1,
                 coordenadasOrigen[0].toDouble(),
                 coordenadasOrigen[1].toDouble(),
                 coordenadasDestino[0].toDouble(),
                 coordenadasDestino[1].toDouble(),
                 distancia,
                 "P",
-                Date().toString(),
+                obtenerFechaActual(),
                 valorRecorrido,
-                -1,
+                tarjetaSeleccionada.id,
                 null,
                 0.toLong(),
                 0.toLong()
 
                 )
+        recorridoJson = jsonParser.recorridoToJson(recorrido)
+        return true
+    }
+
+    private fun obtenerFechaActual(): String {
+
+        var dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
+        var mes = Calendar.getInstance().get(Calendar.MONTH).toString()
+        var anio = Calendar.getInstance().get(Calendar.YEAR).toString()
+
+
+        return "$dia/$mes/$anio"
+
     }
 
     private fun llenarAlertDialog(view: View?) {

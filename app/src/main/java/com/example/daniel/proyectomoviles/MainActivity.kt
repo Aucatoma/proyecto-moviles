@@ -68,11 +68,9 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
         val cliente = DBHandler.getInstance(this.baseContext)!!.obtenerUno(TablaCliente.TABLE_NAME) as Cliente?
         if(cliente != null){
             Log.i("CLIENTE", cliente.nombre)
-            //irActividadPanel()
-            //finish()
+            irActividadPanel()
+            finish()
         }
-
-
 
         val fragmentoLogin = LoginFragment()
         val fragmentTransaction = fragmentManager.beginTransaction()

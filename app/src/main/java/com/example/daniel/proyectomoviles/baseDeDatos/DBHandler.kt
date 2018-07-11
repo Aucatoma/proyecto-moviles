@@ -138,8 +138,8 @@ class DBHandler {
         with(cursor){
             while(moveToNext()){
                 when(tabla.toUpperCase()){
-                    "$TablaCliente.TABLE_NAME" -> resultado = obtenerCliente(this)
-                    "$TablaTarjetaCredito.TABLE_NAME" -> resultado = obtenerTarjeta(this)
+                    "${TablaCliente.TABLE_NAME}" -> resultado = obtenerCliente(this)
+                    "${TablaTarjetaCredito.TABLE_NAME}" -> resultado = obtenerTarjeta(this)
                 }
             }
         }
@@ -150,12 +150,12 @@ class DBHandler {
 
         var tarjetaCredito: TarjetaCredito? = null
         with(cursor){
-            val id = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_ID_TARJETA"))
-            val numeroTarjeta = getString(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_NUM_TARJETA"))
-            val codigoSeguridad = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_COD_SEGURIDAD"))
-            val mesTarjeta = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_MES_TARJETA"))
-            val anioTarjeta = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_ANIO_TARJETA"))
-            val clienteId = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_ID_CLIENTE"))
+            val id = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_ID_TARJETA}"))
+            val numeroTarjeta = getString(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_NUM_TARJETA}"))
+            val codigoSeguridad = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_COD_SEGURIDAD}"))
+            val mesTarjeta = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_MES_TARJETA}"))
+            val anioTarjeta = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_ANIO_TARJETA}"))
+            val clienteId = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_ID_CLIENTE}"))
             tarjetaCredito = TarjetaCredito(id = id,
                     numeroTarjeta = numeroTarjeta,
                     codigoSeguridad = codigoSeguridad.toString(),
@@ -217,7 +217,7 @@ class DBHandler {
 
         if (cursor.moveToFirst()) {
             when(tabla.toUpperCase()){
-                "$TablaTarjetaCredito.TABLE_NAME" ->
+                "${TablaTarjetaCredito.TABLE_NAME}" ->
                     do {
                         entidad.add(obtenerTarjeta(cursor)!!)
 

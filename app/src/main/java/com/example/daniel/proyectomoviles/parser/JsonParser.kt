@@ -39,8 +39,7 @@ class JsonParser {
     fun recorridoToJson(recorrido: Recorrido):String{
 
         return """
-            {
-            "origenLatitud":"${recorrido.origenLatitud}",
+            {"origenLatitud":"${recorrido.origenLatitud}",
             "origenLongitud":"${recorrido.origenLongitud}",
             "destinoLatitud":"${recorrido.destinoLatitud}",
             "destinoLongitud":"${recorrido.destinoLongitud}",
@@ -48,11 +47,11 @@ class JsonParser {
             "estadoRecorrido":"${recorrido.estadoRecorrido}",
             "fechaRecorrido":"${recorrido.fechaRecorrido}",
             "valorRecorrido":"${recorrido.valorRecorrido}",
-            "tarjetaCreditoId":"${recorrido.tarjetaCreditoId}",
-            "conductorId":"${recorrido.conductor}",
+            "tarjetaCreditoId":${recorrido.tarjetaCreditoId},
+            "conductorId":${recorrido.conductor},
             "createdAt":"${recorrido.createdAt}",
-            "updatedAt":"${recorrido.updatedAt}",
-            }""".trimIndent()
+            "updatedAt":"${recorrido.updatedAt}"
+            }""".trim().trimIndent()
 
 
     }
