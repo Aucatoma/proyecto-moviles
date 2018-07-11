@@ -1,7 +1,6 @@
 package com.example.daniel.proyectomoviles
 
 import android.Manifest
-import android.app.Fragment
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
@@ -63,12 +62,17 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //irActividadPanel()
+        //finish()
+
         val cliente = DBHandler.getInstance(this.baseContext)!!.obtenerUno(TablaCliente.TABLE_NAME) as Cliente?
         if(cliente != null){
             Log.i("CLIENTE", cliente.nombre)
-            irActividadPanel()
-            finish()
+            //irActividadPanel()
+            //finish()
         }
+
+
 
         val fragmentoLogin = LoginFragment()
         val fragmentTransaction = fragmentManager.beginTransaction()

@@ -20,6 +20,10 @@ import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import com.beust.klaxon.Parser
+import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaCliente
+import com.example.daniel.proyectomoviles.entidades.Cliente
+import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.entidades.Recorrido
 import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
 import com.example.daniel.proyectomoviles.http.HttpRequest
@@ -51,8 +55,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     // implementation 'com.google.android.gms:play-services-location:15.0.1'
     //Para mas informacion ir a: https://developer.android.com/trainning/location/retrieve-current
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-
 
 
     private lateinit var mMap: GoogleMap
@@ -94,6 +96,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val LatLongB = LatLngBounds.Builder()
 
     lateinit var inputMethodManager : InputMethodManager
+
+    lateinit var cliente:Cliente
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -195,13 +199,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun consultarTarjetasCredito() {
 
-        HttpRequest.obtenerDatos("TarjetaCredito", { error, datos ->
+     /*   HttpRequest.obtenerDatos("TarjetaCredito", { error, datos ->
             if(error){
 
             }else{
                 tarjetasCredito = Klaxon().parseArray(datos)
             }
-        })
+        })*/
+
+
+
     }
 
     private fun inicializarSpinner(view: View) {

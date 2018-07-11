@@ -88,7 +88,7 @@ class DBHandler {
                     put(TablaTarjetaCredito.COL_MES_TARJETA, datos.mesTarjeta)
                     put(TablaTarjetaCredito.COL_COD_SEGURIDAD, datos.codigoSeguridad)
                     put(TablaTarjetaCredito.COL_NUM_TARJETA, datos.numeroTarjeta)
-                    put(TablaTarjetaCredito.COL_ID_TARJETA, datos.clienteId)
+                    put(TablaTarjetaCredito.COL_ID_CLIENTE, datos.clienteId)
                 }
                 val resultado = writableDatabase.insert(TablaTarjetaCredito.TABLE_NAME, null, cv)
                 Log.i("RESULTADO_SQLITE", "$resultado")
@@ -138,11 +138,36 @@ class DBHandler {
         with(cursor){
             while(moveToNext()){
                 when(tabla.toUpperCase()){
-                    "${TablaCliente.TABLE_NAME}" -> resultado = obtenerCliente(this)
+                    "$TablaCliente.TABLE_NAME" -> resultado = obtenerCliente(this)
+                    "$TablaTarjetaCredito.TABLE_NAME" -> resultado = obtenerTarjeta(this)
                 }
             }
         }
         return resultado
+    }
+
+    private fun obtenerTarjeta(cursor: Cursor): TarjetaCredito? {
+
+        var tarjetaCredito: TarjetaCredito? = null
+        with(cursor){
+            val id = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_ID_TARJETA"))
+            val numeroTarjeta = getString(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_NUM_TARJETA"))
+            val codigoSeguridad = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_COD_SEGURIDAD"))
+            val mesTarjeta = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_MES_TARJETA"))
+            val anioTarjeta = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_ANIO_TARJETA"))
+            val clienteId = getInt(getColumnIndexOrThrow("$TablaTarjetaCredito.COL_ID_CLIENTE"))
+            tarjetaCredito = TarjetaCredito(id = id,
+                    numeroTarjeta = numeroTarjeta,
+                    codigoSeguridad = codigoSeguridad.toString(),
+                    mesTarjeta = mesTarjeta,
+                    anioTarjeta = anioTarjeta,
+                    clienteId = clienteId)
+        }
+
+
+        return tarjetaCredito
+
+
     }
 
 
@@ -169,6 +194,51 @@ class DBHandler {
         }
         return cliente
     }
+
+    fun obtenerDatos(tabla:String, condiciones: Array<Pair<String, String>>? = null) : ArrayList<Any>{
+
+        val dbReadable = dbOpenHelper!!.readableDatabase
+        val entidad : ArrayList<Any> = ArrayList()
+
+        var selection: String? = null
+        var selectionArgs: Array<String>? = null
+        condiciones?.let{
+            selectionArgs = arrayOf("")
+            selection = ""
+            condiciones.forEachIndexed { index, pair ->
+                selection += "${pair.first} = ?"
+                selectionArgs!![index] = pair.second
+                if(index  != condiciones.size - 1)
+                    selection += " AND"
+            }
+        }
+
+        val cursor = dbReadable.query(tabla, null, selection, selectionArgs, null, null, null)
+
+        if (cursor.moveToFirst()) {
+            when(tabla.toUpperCase()){
+                "$TablaTarjetaCredito.TABLE_NAME" ->
+                    do {
+                        entidad.add(obtenerTarjeta(cursor)!!)
+
+                    } while (cursor.moveToNext())
+            }
+
+
+        }
+        cursor.close()
+        dbReadable.close()
+
+
+        return entidad
+
+
+
+
+
+    }
+
+
     fun actualizar(){
 
     }

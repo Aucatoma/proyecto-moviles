@@ -11,8 +11,8 @@ class TarjetaCredito (val id:Int,
                       val anioTarjeta:Int,
                       @Json(ignored = false) val recorridos:List<Recorrido>? = null,
                       val clienteId:Int,
-                      val createdAt:Long,
-                      val updatedAt:Long) : Parcelable {
+                      val createdAt:Long = 0,
+                      val updatedAt:Long = 0) : Parcelable {
 
 
     constructor(parcel: Parcel) : this(
