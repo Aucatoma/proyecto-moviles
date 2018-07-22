@@ -24,7 +24,7 @@ class ImageFileHandler {
             val rotatedBitmap = rotateBitmap(bitmap, rotationInDegrees.toFloat()) // rotar el bitmap
 
             var baos = ByteArrayOutputStream()
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos) // hacer del bitmap un jpg y guardar los bytes en 'baos'
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos) // hacer del bitmap un jpg y guardar los bytes en 'baos'
 
             writeFile(file, baos.toByteArray()) // guardar los bytes en el archivo
         }
@@ -72,7 +72,7 @@ class ImageFileHandler {
 
         fun bitmapToB64String(bitmap: Bitmap): String {
             var byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
             return Base64.encodeToString(byteArrayOutputStream.toByteArray(), flags)
         }
 

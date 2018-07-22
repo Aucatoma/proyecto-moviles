@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
 import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaCliente
+import com.example.daniel.proyectomoviles.fragments.UserFragment
 import kotlinx.android.synthetic.main.activity_panel.*
 import kotlinx.android.synthetic.main.app_bar_panel.*
 
@@ -73,8 +74,11 @@ class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
             }
             R.id.nav_gallery -> {
-
-
+                val userFragment = UserFragment()
+                val manager = supportFragmentManager
+                val transactionManager = manager.beginTransaction()
+                transactionManager.replace(R.id.mainLayout, userFragment)
+                transactionManager.commit()
 
             }
             R.id.nav_slideshow -> {

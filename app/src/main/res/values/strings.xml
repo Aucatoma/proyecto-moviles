@@ -92,6 +92,12 @@
         <item>American Express</item>
     </string-array>
 
+    <!-- Fragmento Usuario -->
+    <string name="usuario_frag_editar">Editar</string>
+    <string name="usuario_frag_guardar">Guardar</string>
+    <string name="usuario_frag_tarjetas">Tarjetas de Crédito</string>
+    <string name="usuario_frag_tarjetas_anadir">Añadir tarjeta </string>
+
     <!--Strings de RV Pendientes-->
     <string name="boton_ver_mas">Más</string>
     <string name="boton_emitir_pago">Pagar</string>

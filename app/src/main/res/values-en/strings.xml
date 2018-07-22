@@ -91,5 +91,11 @@
         <item>American Express</item>
     </string-array>
 
+    <!-- Fragmento Usuario -->
+    <string name="usuario_frag_editar">Edit</string>
+    <string name="usuario_frag_guardar">Save</string>
+    <string name="usuario_frag_tarjetas">Credit Cards</string>
+    <string name="usuario_frag_tarjetas_anadir">Add credit card </string>
+
 
 </resources>

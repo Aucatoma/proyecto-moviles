@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class Foto (val id:Int,
-            val datos:String = "",
+            var datos:String = "",
             val extension:String = "",
             val createdAt: Long = 0,
             val updatedAt: Long = 0) : Parcelable {
