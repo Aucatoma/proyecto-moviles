@@ -4,19 +4,21 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.beust.klaxon.Json
 
-class TarjetaCredito (val id:Int,
+class TarjetaCredito (val id:Int = -1,
+                      val companiaTarjeta: String,
                       val numeroTarjeta:String,
                       val codigoSeguridad:String,
                       val mesTarjeta:Int,
                       val anioTarjeta:Int,
                       @Json(ignored = false) val recorridos:List<Recorrido>? = null,
-                      val clienteId:Int,
+                      val clienteId:Int = -1,
                       val createdAt:Long = 0,
                       val updatedAt:Long = 0) : Parcelable {
 
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readInt(),
@@ -29,6 +31,7 @@ class TarjetaCredito (val id:Int,
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
+        parcel.writeString(companiaTarjeta)
         parcel.writeString(numeroTarjeta)
         parcel.writeString(codigoSeguridad)
         parcel.writeInt(mesTarjeta)

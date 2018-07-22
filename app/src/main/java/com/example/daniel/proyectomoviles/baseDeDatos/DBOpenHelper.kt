@@ -49,6 +49,7 @@ class DBOpenHelper(context: Context): SQLiteOpenHelper(context, Database.DB_NAME
         val createTabTar = """
             CREATE TABLE ${TablaTarjetaCredito.TABLE_NAME}(
                 ${TablaTarjetaCredito.COL_ID_TARJETA} INTEGER PRIMARY KEY NOT NULL,
+                ${TablaTarjetaCredito.COL_COM_TARJETA} VARCHAR(15) NOT NULL,
                 ${TablaTarjetaCredito.COL_NUM_TARJETA} VARCHAR(20) NOT NULL,
                 ${TablaTarjetaCredito.COL_ANIO_TARJETA} INTEGER NOT NULL,
                 ${TablaTarjetaCredito.COL_MES_TARJETA} INTEGER NOT NULL,

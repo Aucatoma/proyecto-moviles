@@ -73,6 +73,24 @@
     <string name="signed_up">Registrado exitosamente!</string>
     <string name="sign_up_error_feedback">@string/sign_in_error_feedback</string>
     <string name="sign_up_field_error">Hay campos vacíos</string>
+    <string name="sign_up_credit_card">Tarjeta de Crédito</string>
+
+    <!-- Strings para diálogo de creción/edición de tarjetas de crédito -->
+    <string name="credit_card_dialog_tarjeta">Tarjeta de Crédito</string>
+    <string name="credit_card_dialog_compania">Tipo</string>
+    <string name="credit_card_dialog_numero">Número</string>
+    <string name="credit_card_dialog_codigo">Código de seguridad</string>
+    <string name="credit_card_dialog_vencimiento">Fecha de vencimiento</string>
+    <string name="credit_card_dialog_slash">/</string>
+    <string name="credit_card_dialog_ok">Aceptar</string>
+    <string name="credit_card_dialog_cancel">Cancelar</string>
+
+    <string-array name="array_tarjetas">
+        <item>Elija el tipo</item>
+        <item>Mastercard</item>
+        <item>Visa</item>
+        <item>American Express</item>
+    </string-array>
 
     <!--Strings de RV Pendientes-->
     <string name="boton_ver_mas">Más</string>

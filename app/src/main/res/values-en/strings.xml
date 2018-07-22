@@ -72,6 +72,24 @@
     <string name="signed_up">Signed up successfully!</string>
     <string name="sign_up_error_feedback">@string/sign_in_error_feedback</string>
     <string name="sign_up_field_error">Some fields are empty</string>
+    <string name="sign_up_credit_card">Credit Card</string>
+
+    <!-- Strings para diálogo de creción/edición de tarjetas de crédito -->
+    <string name="credit_card_dialog_tarjeta">Credit Card</string>
+    <string name="credit_card_dialog_compania">Type</string>
+    <string name="credit_card_dialog_numero">Number</string>
+    <string name="credit_card_dialog_codigo">Security code</string>
+    <string name="credit_card_dialog_vencimiento">Expiration date</string>
+    <string name="credit_card_dialog_slash">/</string>
+    <string name="credit_card_dialog_ok">OK</string>
+    <string name="credit_card_dialog_cancel">Cancel</string>
+
+    <string-array name="array_tarjetas">
+        <item>Choose one</item>
+        <item>Mastercard</item>
+        <item>Visa</item>
+        <item>American Express</item>
+    </string-array>
 
 
 </resources>

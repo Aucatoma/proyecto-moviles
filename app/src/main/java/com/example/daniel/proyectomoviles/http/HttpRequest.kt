@@ -11,7 +11,7 @@ class HttpRequest {
 
 
     companion object {
-        val direcccionIP = "192.168.100.67"
+        val direcccionIP = "192.168.100.48"
         val puerto = "1337"
         val uriBase = "http://$direcccionIP:$puerto"
 
@@ -81,13 +81,14 @@ class HttpRequest {
 
         }
 
-        fun registrarCliente(cliente: String, foto: String, callback: (error: Boolean, datos: String) -> Any){
+        fun registrarCliente(cliente: String, foto: String, tarjetaCredito: String, callback: (error: Boolean, datos: String) -> Any){
             var error = false
             var datos = ""
             val jsonBody = """
                 {
                 "cliente": $cliente,
-                "foto": $foto
+                "foto": $foto,
+                "tarjetaCredito": $tarjetaCredito
                 }""".trimIndent()
             Log.i("RESPUESTA_REGISTRO", jsonBody)
             val request = "$uriBase/cliente/registrar".httpPost()

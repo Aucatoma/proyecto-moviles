@@ -84,6 +84,7 @@ class DBHandler {
                 val writableDatabase = dbOpenHelper!!.writableDatabase
                 val cv = ContentValues().apply {
                     put(TablaTarjetaCredito.COL_ID_TARJETA, datos.id)
+                    put(TablaTarjetaCredito.COL_COM_TARJETA, datos.companiaTarjeta)
                     put(TablaTarjetaCredito.COL_ANIO_TARJETA, datos.anioTarjeta)
                     put(TablaTarjetaCredito.COL_MES_TARJETA, datos.mesTarjeta)
                     put(TablaTarjetaCredito.COL_COD_SEGURIDAD, datos.codigoSeguridad)
@@ -140,10 +141,23 @@ class DBHandler {
                 when(tabla.toUpperCase()){
                     "${TablaCliente.TABLE_NAME}" -> resultado = obtenerCliente(this)
                     "${TablaTarjetaCredito.TABLE_NAME}" -> resultado = obtenerTarjeta(this)
+                    "${TablaFoto.TABLE_NAME}" -> resultado = obtenerFoto(this)
                 }
             }
         }
         return resultado
+    }
+
+
+    private fun obtenerFoto(cursor: Cursor): Foto?{
+        var foto: Foto? = null
+        with(cursor){
+            val id = getInt(getColumnIndexOrThrow("${TablaFoto.COL_ID_FOTO}"))
+            val datos = getBlob(getColumnIndexOrThrow("${TablaFoto.COL_FOTO}"))
+            val ext = getString(getColumnIndexOrThrow("${TablaFoto.COL_EXT}"))
+            foto = Foto(id = id, datos = Base64.encodeToString(datos, Base64.URL_SAFE or Base64.NO_WRAP), extension = ext)
+        }
+        return foto
     }
 
     private fun obtenerTarjeta(cursor: Cursor): TarjetaCredito? {
@@ -151,12 +165,14 @@ class DBHandler {
         var tarjetaCredito: TarjetaCredito? = null
         with(cursor){
             val id = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_ID_TARJETA}"))
+            val companiaTarjeta = getString(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_COM_TARJETA}"))
             val numeroTarjeta = getString(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_NUM_TARJETA}"))
             val codigoSeguridad = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_COD_SEGURIDAD}"))
             val mesTarjeta = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_MES_TARJETA}"))
             val anioTarjeta = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_ANIO_TARJETA}"))
             val clienteId = getInt(getColumnIndexOrThrow("${TablaTarjetaCredito.COL_ID_CLIENTE}"))
             tarjetaCredito = TarjetaCredito(id = id,
+                    companiaTarjeta = companiaTarjeta,
                     numeroTarjeta = numeroTarjeta,
                     codigoSeguridad = codigoSeguridad.toString(),
                     mesTarjeta = mesTarjeta,

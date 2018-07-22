@@ -4,6 +4,7 @@ import com.beust.klaxon.Klaxon
 import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.entidades.Recorrido
+import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
 
 class JsonParser {
 
@@ -34,6 +35,16 @@ class JsonParser {
             "datos":"${foto.datos}",
             "extension":"${foto.extension}"
             }""".trimIndent()
+    }
+
+    fun tarjetaToJson(tarjetaCredito: TarjetaCredito): String{
+        return """{
+            "companiaTarjeta": "${tarjetaCredito.companiaTarjeta}",
+            "numeroTarjeta": "${tarjetaCredito.numeroTarjeta}",
+            "codigoSeguridad": "${tarjetaCredito.codigoSeguridad}",
+            "mesTarjeta":"${tarjetaCredito.mesTarjeta}",
+            "anioTarjeta":"${tarjetaCredito.anioTarjeta}"
+        }""".trimIndent().trim()
     }
 
     fun recorridoToJson(recorrido: Recorrido):String{

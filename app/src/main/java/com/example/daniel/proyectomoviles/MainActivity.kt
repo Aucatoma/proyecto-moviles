@@ -10,7 +10,11 @@ import android.util.Log
 import android.widget.Toast
 import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
 import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaCliente
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaFoto
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaTarjetaCredito
 import com.example.daniel.proyectomoviles.entidades.Cliente
+import com.example.daniel.proyectomoviles.entidades.Foto
+import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
 import com.example.daniel.proyectomoviles.fragments.AuthFragment
 import com.example.daniel.proyectomoviles.fragments.LoginFragment
 import com.example.daniel.proyectomoviles.http.HttpRequest
@@ -54,8 +58,6 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
         fragmentTransaction.commit()
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
 
@@ -66,8 +68,12 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
         //finish()
 
         val cliente = DBHandler.getInstance(this.baseContext)!!.obtenerUno(TablaCliente.TABLE_NAME) as Cliente?
+        val tarjeta = DBHandler.getInstance(this.baseContext)!!.obtenerUno(TablaTarjetaCredito.TABLE_NAME) as TarjetaCredito?
+        val foto = DBHandler.getInstance(this.baseContext)!!.obtenerUno(TablaFoto.TABLE_NAME) as Foto?
         if(cliente != null){
             Log.i("CLIENTE", cliente.nombre)
+            Log.i("CLIENTE", tarjeta!!.companiaTarjeta)
+            Log.i("CLIENTE", foto!!.id.toString())
             irActividadPanel()
             finish()
         }

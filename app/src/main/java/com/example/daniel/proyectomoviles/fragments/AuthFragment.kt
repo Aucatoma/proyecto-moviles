@@ -12,15 +12,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.example.daniel.proyectomoviles.PanelActivity
-
 import com.example.daniel.proyectomoviles.R
 import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
 import com.example.daniel.proyectomoviles.entidades.*
@@ -44,7 +41,6 @@ class AuthFragment : Fragment() {
     var idVisibilityOffRes: Int = 0
     var idVisibilityOnRes: Int = 0
     var imagePath = ""
-    lateinit var imageBitmap: Bitmap
     var username: String = ""
     var password: String = ""
     val jsonParser = JsonParser()
@@ -65,7 +61,6 @@ class AuthFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_auth_fragment, container, false)
     }
 
@@ -181,8 +176,9 @@ class AuthFragment : Fragment() {
             textView_frag_auth_feed.text = resources.getString(R.string.sign_in_auth_error_feedback)
             logging_in = false
         }else{
-            textView_frag_auth_feed.text = ""
+            activity!!.setContentView(R.layout.activity_main)
             Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logged_success), Toast.LENGTH_LONG).show()
+            textView_frag_auth_feed.text = ""
             async(UI) {
                 val cliente: Deferred<Cliente?> = bg {
                     jsonParser.jsonToCliente(datos)

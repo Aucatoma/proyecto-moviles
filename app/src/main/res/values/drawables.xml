@@ -5,4 +5,11 @@
     <item name="ic_menu_manage" type="drawable">@android:drawable/ic_menu_manage</item>
     <item name="ic_menu_share" type="drawable">@android:drawable/ic_menu_share</item>
     <item name="ic_menu_send" type="drawable">@android:drawable/ic_menu_send</item>
+
+    <array name="drawable_tarjetas">
+        <item>@drawable/ic_credit_card_solid</item>
+        <item>@drawable/ic_mastercard_logo</item>
+        <item>@drawable/ic_icons8_visa</item>
+        <item>@drawable/ic_icons8_american_express</item>
+    </array>
 </resources>
