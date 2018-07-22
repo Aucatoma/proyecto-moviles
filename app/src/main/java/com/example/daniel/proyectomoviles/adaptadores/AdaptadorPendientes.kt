@@ -3,19 +3,14 @@ package com.example.daniel.proyectomoviles.adaptadores
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.os.Parcel
-import android.os.Parcelable
-import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import com.example.daniel.proyectomoviles.R
 import com.example.daniel.proyectomoviles.entidades.Recorrido
-import com.google.android.gms.maps.model.LatLng
+
 
 class AdaptadorPendientes (internal var recorridos: ArrayList<Recorrido>, internal var ctx: Context) : RecyclerView.Adapter<AdaptadorPendientes.ViewHolderPendientes>(){
 

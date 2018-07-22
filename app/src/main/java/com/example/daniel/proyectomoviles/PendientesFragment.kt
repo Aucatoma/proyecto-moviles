@@ -61,7 +61,6 @@ class PendientesFragment : Fragment() {
 
             override fun onRightClicked(position: Int) {
 
-
                 enviarPendienteAHistorial()
 
                 adaptador.recorridos.removeAt(position)
