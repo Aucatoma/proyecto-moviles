@@ -17,13 +17,15 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaRecorrido
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeControllerActions
 
 class PendientesFragment : Fragment() {
 
     lateinit var recyclerRecorrido: RecyclerView
     lateinit var listaRecorridos: ArrayList<Recorrido>
-    lateinit var listaPendientes: ArrayList<Recorrido>
+
 
     lateinit var swipeController : SwipeController
 
@@ -33,10 +35,6 @@ class PendientesFragment : Fragment() {
         val view:View = inflater.inflate(R.layout.fragment_pendientes, container, false)
 
         listaRecorridos = ArrayList()
-        listaPendientes = ArrayList()
-
-
-
         setUpRecyclerView(view)
 
         return view
@@ -49,7 +47,7 @@ class PendientesFragment : Fragment() {
 
         llenarRecorridos()
 
-        val adaptador = AdaptadorPendientes(listaPendientes,requireContext())
+        val adaptador = AdaptadorPendientes(listaRecorridos,requireContext())
         recyclerRecorrido.adapter = adaptador
 
         setUpSwipeOnRecyclerView(adaptador)
@@ -70,7 +68,7 @@ class PendientesFragment : Fragment() {
 
             override fun onLeftClicked(position: Int) {
 
-                mostrarDetallePendiente(listaPendientes[position])
+                mostrarDetallePendiente(listaRecorridos[position])
             }
         })
 
@@ -141,32 +139,14 @@ class PendientesFragment : Fragment() {
 
     private fun enviarPendienteAHistorial() {
 
+
     }
 
 
     private fun llenarRecorridos() {
 
         //Aqui se consultaria todos los recorridos del cliente y lo meteria en la listaRecorridos
-
-
-
-
-
-
-
-
-        //Ahora, para enviar al RV de pendientes, solo se escogen aquellos cuyo estado sea false,
-        //ya que eso significa que están pendientes aún
-
-        //Para hacer esto, primero recorremos el arreglo de los recorridos
-        listaRecorridos.forEach { recorrido:Recorrido ->
-
-            //Y añadimos solo los pendientes
-            if(recorrido.estadoRecorrido.equals("P")){
-                listaPendientes.add(recorrido)
-            }
-
-        }
+       listaRecorridos = DBHandler.getInstance(requireContext())!!.obtenerDatos(TablaRecorrido.TABLE_NAME, arrayOf(Pair(TablaRecorrido.COL_EST_RECORRIDO, "P"))) as ArrayList<Recorrido>
 
     }
 

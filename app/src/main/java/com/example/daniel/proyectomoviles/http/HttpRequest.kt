@@ -11,7 +11,7 @@ class HttpRequest {
 
 
     companion object {
-        val direcccionIP = "192.168.100.48"
+        val direcccionIP = "192.168.100.78"
         val puerto = "1337"
         val uriBase = "http://$direcccionIP:$puerto"
 

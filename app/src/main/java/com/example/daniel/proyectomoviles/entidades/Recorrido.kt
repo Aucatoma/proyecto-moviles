@@ -13,7 +13,7 @@ class Recorrido (val id:Int,
                  val fechaRecorrido: String,
                  val valorRecorrido: Double,
                  val tarjetaCreditoId:Int,
-                 val conductor:Conductor?,
+                 val conductor:Conductor? = null,
                  val createdAt:Long,
                  val updatedAt:Long) : Parcelable {
 

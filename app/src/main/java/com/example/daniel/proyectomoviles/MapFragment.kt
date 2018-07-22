@@ -46,6 +46,7 @@ import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
 import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.net.URL
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
@@ -53,6 +54,7 @@ import kotlin.collections.ArrayList
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
+    val dateFormat = SimpleDateFormat("dd-MM-yyyy")
     //Para usar FusedLocationProviderClient se debe agregar la siguiente dependencia en el build.gradle a nivel de aplicacion:
     // implementation 'com.google.android.gms:play-services-location:15.0.1'
     //Para mas informacion ir a: https://developer.android.com/trainning/location/retrieve-current
@@ -290,7 +292,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun crearRecorrido(): Boolean {
 
-        Log.i("FECHA", obtenerFechaActual())
+
 
         recorrido = Recorrido(-1,
                 coordenadasOrigen[0].toDouble(),
@@ -299,7 +301,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 coordenadasDestino[1].toDouble(),
                 distancia,
                 "P",
-                obtenerFechaActual(),
+                dateFormat.format(Date()),
                 valorRecorrido,
                 tarjetaSeleccionada.id,
                 null,
@@ -311,16 +313,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return true
     }
 
-    private fun obtenerFechaActual(): String {
-
-        var dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
-        var mes = Calendar.getInstance().get(Calendar.MONTH).toString()
-        var anio = Calendar.getInstance().get(Calendar.YEAR).toString()
-
-
-        return "$dia/$mes/$anio"
-
-    }
 
     private fun llenarAlertDialog(view: View?) {
 

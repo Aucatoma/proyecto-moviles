@@ -179,6 +179,7 @@ class AuthFragment : Fragment() {
             activity!!.setContentView(R.layout.activity_main)
             Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logged_success), Toast.LENGTH_LONG).show()
             textView_frag_auth_feed.text = ""
+            jsonParser.jsonToCliente(datos)
             async(UI) {
                 val cliente: Deferred<Cliente?> = bg {
                     jsonParser.jsonToCliente(datos)
