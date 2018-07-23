@@ -66,31 +66,25 @@ class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_mapa -> {
 
-                val mapFragment = MapFragment()
-                val manager:android.support.v4.app.FragmentManager = supportFragmentManager
-                manager.beginTransaction().replace(R.id.mainLayout,mapFragment).commit()
-
-            }
-            R.id.nav_gallery -> {
+            R.id.nav_cuenta -> {
                 val userFragment = UserFragment()
                 val manager = supportFragmentManager
                 val transactionManager = manager.beginTransaction()
                 transactionManager.replace(R.id.mainLayout, userFragment)
                 transactionManager.commit()
+            }
+
+            R.id.nav_mapa -> {
+                val mapFragment = MapFragment()
+                val manager:android.support.v4.app.FragmentManager = supportFragmentManager
+                manager.beginTransaction().replace(R.id.mainLayout,mapFragment).commit()
 
             }
-            R.id.nav_slideshow -> {
+            R.id.nav_pendientes -> {
 
             }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
+            R.id.nav_historial -> {
 
             }
         }

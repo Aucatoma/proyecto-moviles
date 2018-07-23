@@ -19,30 +19,33 @@
 
 
     <!--Strings de lateral panel-->
+    <string name="opcion_cuenta">Account</string>
     <string name="opcion_mapa">Map</string>
+    <string name="opcion_historial">History</string>
+    <string name="opcion_pendientes">Pending trips</string>
 
 
 
     <!--Strings interfaz mapa-->
-    <string name="donde_desea_ir">  Where you want to go?</string>
-    <string name="btn_buscar">Search</string>
-    <string name="btn_solicitar_taxu">Find a Cab</string>
-    <string name="marcador_orgien">You\'re here</string>
-    <string name="marcador_destino">Your destination</string>
+    <string name="donde_desea_ir">  ¿Dónde desea ir?</string>
+    <string name="btn_buscar">Buscar</string>
+    <string name="btn_solicitar_taxu">Solicitar taxi</string>
+    <string name="marcador_orgien">Usted está aquí</string>
+    <string name="marcador_destino">Su destino</string>
 
 
-    <!--String AlertDialog Confirmacion carrera-->
-    <string name="cabecera_dialog">Confirmation</string>
-    <string name="txt_origen">From: </string>
-    <string name="txt_destino">To: </string>
-    <string name="txt_distancia">Distance: </string>
-    <string name="valor_a_pagar">Pay</string>
-    <string name="btn_cancelar_carrera">Cancel</string>
-    <string name="btn_aceptar_carrera">Confirm</string>
+    <!--String AlertDialog Cnfirmacion carrera-->
+    <string name="cabecera_dialog">Confirmación</string>
+    <string name="txt_origen">Origen: </string>
+    <string name="txt_destino">Destino: </string>
+    <string name="txt_distancia">Distancia: </string>
+    <string name="valor_a_pagar">Valor a pagar</string>
+    <string name="btn_cancelar_carrera">Cancelar</string>
+    <string name="btn_aceptar_carrera">Confirmar</string>
 
 
     <!--Strings sobre conexion a internet-->
-    <string name="conexion_internet">You don\'t have connection</string>
+    <string name="conexion_internet">No tiene conexión a internet</string>
 
 
     <!-- Strings para login -->
@@ -102,22 +105,6 @@
     <string name="usuario_frag_tarjetas_fallo_upd">Couldn\'t update credit card</string>
     <string name="usuario_frag_tarjetas_exito_del">Credit card deleted</string>
     <string name="usuario_frag_tarjetas_fallo_del">Couldn\'t delete credit card</string>
-
-    <!--Strings de RV Pendientes-->
-    <string name="boton_ver_mas">More</string>
-    <string name="boton_emitir_pago">Pay</string>
-
-    <!--Strings de RV Historial-->
-    <string name="boton_eliminar_recorrido">Delete</string>
-
-    <!--String AlertDialog Detalle recorridos en Pendiente e Historial-->
-    <string name="cabecera_detalle_recorrido">Details</string>
-
-
-
-
-
-
 
 
 </resources>
