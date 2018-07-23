@@ -97,9 +97,16 @@ class HistorialFragment : Fragment() {
 
     private fun mostrarDetalle(recorrido: Recorrido) {
         val materialDialog = MaterialDialog.Builder(requireContext())
+                .onAny{ dialog, which ->
+
+                    if(which.name=="POSITIVE"){compartirRecorrido()}
+                    else if (which.name=="NEGATIVE"){ }
+
+                }
                 .title(requireContext().getString(R.string.cabecera_detalle_recorrido))
                 .customView(R.layout.alert_dialog_detalle_pendiente,true)
-                .positiveText("OK")
+                .positiveText("Compartir")
+                .negativeText("OK")
                 .show()
 
         if(materialDialog!=null){
@@ -107,6 +114,10 @@ class HistorialFragment : Fragment() {
             val view = materialDialog.customView
             llenarDetalle(view, recorrido)
         }
+    }
+
+    private fun compartirRecorrido() {
+
     }
 
     private fun llenarDetalle(view: View?, recorrido: Recorrido) {

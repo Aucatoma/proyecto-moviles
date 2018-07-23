@@ -183,12 +183,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         //Se crean los listeners para los botones del Dialog
                         .onAny { dialog, which ->
 
-                            if(which.name=="POSITIVE"){
-
-                                registrarRecorrido()
-
-
-                            }else if (which.name=="NEGATIVE"){ }
+                            if(which.name=="POSITIVE"){registrarRecorrido()}
+                            else if (which.name=="NEGATIVE"){ }
 
                         }
                         .title(R.string.cabecera_dialog)
