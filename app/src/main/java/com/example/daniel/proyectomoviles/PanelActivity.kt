@@ -61,7 +61,7 @@ class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
             val bitmap: Deferred<Bitmap> = bg {
                 ImageFileHandler.base64ToBitmap(foto.datos)
             }
-            nav_foto.setImageBitmap(bitmap.await())
+            afterConversion(bitmap.await())
         }
 
         val contactUsFragment = MapFragment()
@@ -71,8 +71,9 @@ class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     }
 
 
-
-
+    fun afterConversion(bitmap: Bitmap){
+        nav_foto.setImageBitmap(Bitmap.createScaledBitmap(bitmap, 200, 200, false))
+    }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
