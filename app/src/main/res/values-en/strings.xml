@@ -107,5 +107,15 @@
     <string name="usuario_frag_tarjetas_exito_del">Credit card deleted</string>
     <string name="usuario_frag_tarjetas_fallo_del">Couldn\'t delete credit card</string>
 
+    <!--Strings de RV Pendientes-->
+    <string name="boton_ver_mas">More</string>
+    <string name="boton_emitir_pago">Pay</string>
+
+    <!--Strings de RV Historial-->
+    <string name="boton_eliminar_recorrido">Delete</string>
+
+    <!--String AlertDialog Detalle recorridos en Pendiente e Historial-->
+    <string name="cabecera_detalle_recorrido">Details</string>
+
 
 </resources>
