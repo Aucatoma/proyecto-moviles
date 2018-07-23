@@ -97,11 +97,11 @@ class HistorialFragment : Fragment() {
         HttpRequest.eliminarDato("Recorrido","${recorrido.id}",{error, datos ->
 
             if(error){
-                Toast.makeText(requireContext(),"No se pudo eliminar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"Error", Toast.LENGTH_SHORT).show()
             }else{
                 Log.i("RESPUESTA_REGISTRO", datos)
                 DBHandler.getInstance(activity!!)!!.eliminar(TablaRecorrido.TABLE_NAME,"${recorrido.id}")
-                Toast.makeText(requireContext(),"Se eliminó correctamente", Toast.LENGTH_SHORT).show()
+
             }
 
         })

@@ -176,7 +176,7 @@ class PendientesFragment : Fragment() {
                 bg { HttpRequest.actualizarDato("Recorrido","${recorrido.id}",recorridoJson, {error, datos ->
 
                     if(error){
-                        Toast.makeText(requireContext(),"Error al actualizar", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"Error", Toast.LENGTH_SHORT).show()
                     }else{
                         Log.i("RESPUESTA_REGISTRO", datos)
                         DBHandler.getInstance(activity!!)!!.actualizar(mRecorrido)
