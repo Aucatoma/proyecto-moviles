@@ -3,6 +3,7 @@ package com.example.daniel.proyectomoviles.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -55,12 +56,16 @@ class UserFragment : Fragment() {
     lateinit var foto: Foto
     var imagePath = ""
     val jsonParser = JsonParser()
+    var mensajeFallo: Int = 0
+    var mensajeExito: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cliente = DBHandler.getInstance(activity!!.baseContext)!!.obtenerUno(TablaCliente.TABLE_NAME) as Cliente
         tarjetas = DBHandler.getInstance(activity!!.baseContext)!!.obtenerDatos(TablaTarjetaCredito.TABLE_NAME) as ArrayList<TarjetaCredito>
         foto = DBHandler.getInstance(activity!!.baseContext)!!.obtenerUno(TablaFoto.TABLE_NAME) as Foto
+        mensajeExito = resources.getIdentifier("@string/usuario_frag_tarjetas_exito", "string", activity!!.packageName)
+        mensajeFallo = resources.getIdentifier("@string/usuario_frag_tarjetas_fallo", "string", activity!!.packageName)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +76,7 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewManager = LinearLayoutManager(activity!!)
+        viewManager = LinearLayoutManager(activity!!.baseContext)
         viewAdapter = AdaptadorTarjetasFrag(tarjetas, activity!!)
 
         recyclerView = recycler_usu_frag_cards.apply {
@@ -154,12 +159,12 @@ class UserFragment : Fragment() {
         val tarjetaJson = jsonParser.tarjetaToJson(tarjetaCredito)
         HttpRequest.insertarDato("TarjetaCredito", tarjetaJson, { error, datos ->
             if(error){
-                Toast.makeText(activity!!.baseContext, activity!!.resources.getString(R.string.usuario_frag_tarjetas_fallo), Toast.LENGTH_LONG)
+                Toast.makeText(activity!!, resources.getString(R.string.usuario_frag_tarjetas_fallo), Toast.LENGTH_LONG).show()
             }else{
-                Toast.makeText(activity!!.baseContext, activity!!.resources.getString(R.string.usuario_frag_tarjetas_exito), Toast.LENGTH_LONG)
+                Toast.makeText(activity!!, resources.getString(R.string.usuario_frag_tarjetas_exito), Toast.LENGTH_LONG).show()
                 val tarjetaInsertada = jsonParser.jsonToTarjeta(datos)
-                DBHandler.getInstance(activity!!.baseContext)!!.insertar(tarjetaCredito)
-                tarjetas.add(tarjetaInsertada as TarjetaCredito)
+                DBHandler.getInstance(activity!!)!!.insertar(tarjetaInsertada as TarjetaCredito)
+                tarjetas.add(tarjetaInsertada)
                 viewAdapter.notifyDataSetChanged()
 
             }

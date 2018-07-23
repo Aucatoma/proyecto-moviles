@@ -19,7 +19,10 @@
 
 
     <!--Strings de lateral panel-->
+    <string name="opcion_cuenta">Cuenta</string>
     <string name="opcion_mapa">Mapa</string>
+    <string name="opcion_historial">Historial</string>
+    <string name="opcion_pendientes">Pendientes</string>
 
 
     <!--Strings interfaz mapa-->

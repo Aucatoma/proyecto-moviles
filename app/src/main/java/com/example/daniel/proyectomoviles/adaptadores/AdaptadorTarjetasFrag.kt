@@ -3,6 +3,7 @@ package com.example.daniel.proyectomoviles.adaptadores
 import android.app.AlertDialog
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.*
 import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
@@ -94,10 +95,11 @@ class AdaptadorTarjetasFrag(private val myDataset: ArrayList<TarjetaCredito>, va
         fun eliminarAplicacion(tarjetaCredito: TarjetaCredito) {
             HttpRequest.eliminarDato("TarjetaCredito", tarjetaCredito.id.toString(), { error, datos ->
                 if(error){
-                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_fallo_del), Toast.LENGTH_LONG)
+                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_fallo_del), Toast.LENGTH_LONG).show()
 
                 }else{
-                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_exito_del), Toast.LENGTH_LONG)
+
+                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_exito_del), Toast.LENGTH_LONG).show()
                     DBHandler.getInstance(contextApp)!!.eliminar(TablaTarjetaCredito.TABLE_NAME, tarjetaCredito.id.toString())
                     myDataset.remove(tarjetaCredito)
                     notifyDataSetChanged()
@@ -130,12 +132,16 @@ class AdaptadorTarjetasFrag(private val myDataset: ArrayList<TarjetaCredito>, va
             val tarjetaJson = jsonParser.tarjetaToJson(tarjetaCredito)
             HttpRequest.actualizarDato("TarjetaCredito", tarjetaCredito.id.toString(), tarjetaJson, { error, datos ->
                 if(error){
-                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_fallo_upd), Toast.LENGTH_LONG)
+                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_fallo_upd), Toast.LENGTH_LONG).show()
                 }else{
-                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_exito_upd), Toast.LENGTH_LONG)
-                    val tarjetaInsertada = jsonParser.jsonToTarjeta(datos)
+                    Log.i("ACTUALIZAR", datos)
+                    Toast.makeText(contextApp, contextApp.resources.getString(R.string.usuario_frag_tarjetas_exito_upd), Toast.LENGTH_LONG).show()
                     DBHandler.getInstance(contextApp)!!.actualizar(tarjetaCredito)
-                    myDataset.add(tarjetaInsertada as TarjetaCredito)
+                    tarjeta.numeroTarjeta = tarjetaCredito.numeroTarjeta
+                    tarjeta.anioTarjeta = tarjetaCredito.anioTarjeta
+                    tarjeta.mesTarjeta = tarjetaCredito.mesTarjeta
+                    tarjeta.codigoSeguridad = tarjetaCredito.codigoSeguridad
+                    tarjeta.companiaTarjeta = tarjetaCredito.companiaTarjeta
                     notifyDataSetChanged()
 
                 }

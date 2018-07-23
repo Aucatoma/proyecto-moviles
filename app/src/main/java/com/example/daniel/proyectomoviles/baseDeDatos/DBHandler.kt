@@ -361,12 +361,15 @@ class DBHandler {
         val dbWritable = dbOpenHelper!!.writableDatabase
         when(tabla){
             TablaTarjetaCredito.TABLE_NAME -> {
+                Log.i("ELIMINAR", id)
                 val selection = "${TablaTarjetaCredito.COL_ID_TARJETA} LIKE ?"
-                val selectionArgs = arrayOf("$id")
+                val selectionArgs = arrayOf(id)
                 val deletedRows = dbWritable.delete(tabla, selection, selectionArgs)
                 Log.i("RESULTADO_SQLITE", deletedRows.toString())
+                dbWritable.close()
                 if(deletedRows >= 0)
                     return@eliminar true
+
             }
             TablaFoto.TABLE_NAME -> {}
             TablaCliente.TABLE_NAME -> { }
