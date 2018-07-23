@@ -27,7 +27,7 @@
         android:layout_marginLeft="10dp"
         android:background="@drawable/borde_blanco_search_bar"
         android:elevation="10dp"
-        tools:layout_editor_absoluteY="5dp">
+        tools:layout_editor_absoluteY="10dp">
 
 
         <ImageView
