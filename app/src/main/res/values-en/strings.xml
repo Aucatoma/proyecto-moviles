@@ -116,6 +116,8 @@
 
     <!--String AlertDialog Detalle recorridos en Pendiente e Historial-->
     <string name="cabecera_detalle_recorrido">Details</string>
+    <string name="campo_fecha">Date</string>
+    <string name="campo_conductor">Driver</string>
 
 
 </resources>
