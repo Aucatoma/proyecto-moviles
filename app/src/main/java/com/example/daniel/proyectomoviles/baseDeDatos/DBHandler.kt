@@ -60,7 +60,7 @@ class DBHandler {
 
                 }
                 val resultado = writableDatabase.insert(TablaConductor.TABLE_NAME, null, cv)
-                Log.i("RESULTADO_SQLITE_C", "$resultado")
+                Log.i("RESULTADO_SQLITE", "$resultado")
                 writableDatabase.close()
             }
             is Recorrido -> {
@@ -316,11 +316,6 @@ class DBHandler {
 
 
         return entidad
-
-
-
-
-
     }
 
 
@@ -349,7 +344,25 @@ class DBHandler {
                     return@actualizar true
             }
             is Cliente -> {}
-            is Recorrido -> {}
+            is Recorrido -> {
+
+                val values = ContentValues().apply {
+                    put(TablaRecorrido.COL_EST_RECORRIDO, datos.estadoRecorrido)
+
+                }
+                val selection = "${TablaRecorrido.COL_ID_RECORRIDO} LIKE ?"
+                val selectionArgs = arrayOf("${datos.id}")
+                val count = dbWritable.update(
+                        TablaRecorrido.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                )
+                Log.i("RESULTADO_SQLITE", count.toString())
+                if(count >= 0)
+                    return@actualizar true
+
+            }
             is Foto -> {}
             else -> return@actualizar false
         }
