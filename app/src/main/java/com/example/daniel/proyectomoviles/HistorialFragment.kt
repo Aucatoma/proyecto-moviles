@@ -105,7 +105,7 @@ class HistorialFragment : Fragment() {
                 }
                 .title(requireContext().getString(R.string.cabecera_detalle_recorrido))
                 .customView(R.layout.alert_dialog_detalle_pendiente,true)
-                .positiveText("Compartir")
+                .positiveText(requireContext().getString(R.string.boton_compartir))
                 .negativeText("OK")
                 .show()
 

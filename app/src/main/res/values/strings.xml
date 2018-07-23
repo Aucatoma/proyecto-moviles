@@ -119,6 +119,7 @@
     <string name="cabecera_detalle_recorrido">Detalle</string>
     <string name="campo_fecha">Fecha</string>
     <string name="campo_conductor">Conductor</string>
+    <string name="boton_compartir">Compartir</string>
 
 
 </resources>

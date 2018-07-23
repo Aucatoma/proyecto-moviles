@@ -118,6 +118,7 @@
     <string name="cabecera_detalle_recorrido">Details</string>
     <string name="campo_fecha">Date</string>
     <string name="campo_conductor">Driver</string>
+    <string name="boton_compartir">Share</string>
 
 
 </resources>
