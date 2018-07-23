@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
+import com.beust.klaxon.Json
 
 import com.example.daniel.proyectomoviles.R
 import com.example.daniel.proyectomoviles.adaptadores.AdaptadorTarjetasFrag
@@ -29,6 +30,8 @@ import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaTarjetaCr
 import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
+import com.example.daniel.proyectomoviles.http.HttpRequest
+import com.example.daniel.proyectomoviles.parser.JsonParser
 import com.example.daniel.proyectomoviles.utilities.ImageFileHandler
 import kotlinx.android.synthetic.main.fragment_auth_fragment.*
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -37,6 +40,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
+import org.jetbrains.anko.support.v4.act
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,7 +54,7 @@ class UserFragment : Fragment() {
     lateinit var tarjetas: ArrayList<TarjetaCredito>
     lateinit var foto: Foto
     var imagePath = ""
-    lateinit var imageBitmap: Bitmap
+    val jsonParser = JsonParser()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +71,8 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewManager = LinearLayoutManager(activity!!.baseContext)
-        viewAdapter = AdaptadorTarjetasFrag(tarjetas, activity!!.baseContext)
+        viewManager = LinearLayoutManager(activity!!)
+        viewAdapter = AdaptadorTarjetasFrag(tarjetas, activity!!)
 
         recyclerView = recycler_usu_frag_cards.apply {
             setHasFixedSize(true)
@@ -84,13 +88,14 @@ class UserFragment : Fragment() {
         imgView_usu_frag_take.visibility = View.GONE
 
         btn_usu_frag_add_card.setOnClickListener {
-            val dialog = MaterialDialog.Builder(activity!!.baseContext)
+            val dialog = MaterialDialog.Builder(activity!!)
+                    .title(R.string.credit_card_dialog_tarjeta)
                     .customView(R.layout.credit_card_dialog, true)
                     .negativeText(R.string.credit_card_dialog_cancel)
                     .positiveText(R.string.credit_card_dialog_ok)
                     .onPositive{ dialog, which ->
-                      //  val tarjeta = crearTarjeta(dialog.customView)
-                        //guardarTarjeta(tarjeta)
+                        val tarjeta = crearTarjeta(dialog.customView as View)
+                        guardarTarjeta(tarjeta)
                     }
                     .build()
             /* Generación de contenido del spinner */
@@ -104,8 +109,7 @@ class UserFragment : Fragment() {
                     dialog.customView!!.findViewById<ImageView>(R.id.imgView_card_dialog_compania).setImageDrawable(typedArray.getDrawable(i))
                 }
             }
-
-
+            dialog.show()
         }
 
         imgView_usu_frag_take.setOnClickListener {
@@ -139,20 +143,33 @@ class UserFragment : Fragment() {
                 numeroTarjeta = numero,
                 codigoSeguridad = codigo,
                 mesTarjeta = mes,
-                anioTarjeta = anio
+                anioTarjeta = anio,
+                clienteId = cliente.id
 
         )
 
     }
 
     fun guardarTarjeta(tarjetaCredito: TarjetaCredito){
+        val tarjetaJson = jsonParser.tarjetaToJson(tarjetaCredito)
+        HttpRequest.insertarDato("TarjetaCredito", tarjetaJson, { error, datos ->
+            if(error){
+                Toast.makeText(activity!!.baseContext, activity!!.resources.getString(R.string.usuario_frag_tarjetas_fallo), Toast.LENGTH_LONG)
+            }else{
+                Toast.makeText(activity!!.baseContext, activity!!.resources.getString(R.string.usuario_frag_tarjetas_exito), Toast.LENGTH_LONG)
+                val tarjetaInsertada = jsonParser.jsonToTarjeta(datos)
+                DBHandler.getInstance(activity!!.baseContext)!!.insertar(tarjetaCredito)
+                tarjetas.add(tarjetaInsertada as TarjetaCredito)
+                viewAdapter.notifyDataSetChanged()
 
+            }
+        })
     }
 
 
     fun llenarVista(){
         val image = ImageFileHandler.base64ToBitmap(foto.datos)
-        imageBitmap = Bitmap.createScaledBitmap(image, 123, 150, false)
+        val imageBitmap = Bitmap.createScaledBitmap(image, 123, 150, false)
         imgView_usu_frag_foto.setImageBitmap(imageBitmap)
         editText__usu_frag_name.append(cliente.nombre)
         editText_usu_frag_last.append(cliente.apellido)
@@ -165,7 +182,6 @@ class UserFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == AuthFragment.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
-            imageBitmap.recycle()
             async(UI){
                 val imageRotated: Deferred<Bitmap> = bg{
                     ImageFileHandler.bitmapFromFileRotation(File(imagePath))

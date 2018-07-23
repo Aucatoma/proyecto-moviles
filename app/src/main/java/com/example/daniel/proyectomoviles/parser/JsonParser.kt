@@ -18,6 +18,10 @@ class JsonParser {
         return klaxon.parse<Recorrido>(json)
     }
 
+    fun jsonToTarjeta(json: String): TarjetaCredito?{
+        return klaxon.parse<TarjetaCredito>(json)
+    }
+
     fun clienteToJson(cliente: Cliente): String{
         return """
             {"nombre":"${cliente.nombre}",
@@ -43,7 +47,8 @@ class JsonParser {
             "numeroTarjeta": "${tarjetaCredito.numeroTarjeta}",
             "codigoSeguridad": "${tarjetaCredito.codigoSeguridad}",
             "mesTarjeta":"${tarjetaCredito.mesTarjeta}",
-            "anioTarjeta":"${tarjetaCredito.anioTarjeta}"
+            "anioTarjeta":"${tarjetaCredito.anioTarjeta}",
+            "clienteId":"${tarjetaCredito.clienteId}"
         }""".trimIndent().trim()
     }
 

@@ -96,6 +96,12 @@
     <string name="usuario_frag_guardar">Save</string>
     <string name="usuario_frag_tarjetas">Credit Cards</string>
     <string name="usuario_frag_tarjetas_anadir">Add credit card </string>
+    <string name="usuario_frag_tarjetas_exito">Credit card added</string>
+    <string name="usuario_frag_tarjetas_fallo">Couldn\'t add credit card</string>
+    <string name="usuario_frag_tarjetas_exito_upd">Credit card updated</string>
+    <string name="usuario_frag_tarjetas_fallo_upd">Couldn\'t update credit card</string>
+    <string name="usuario_frag_tarjetas_exito_del">Credit card deleted</string>
+    <string name="usuario_frag_tarjetas_fallo_del">Couldn\'t delete credit card</string>
 
 
 </resources>
