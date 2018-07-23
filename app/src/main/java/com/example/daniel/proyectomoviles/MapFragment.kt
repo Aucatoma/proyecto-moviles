@@ -235,6 +235,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         adaptadorSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter=adaptadorSpinner
 
+        val typedArray = resources.obtainTypedArray(R.array.drawable_tarjetas)
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 //nada
@@ -243,6 +245,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
                 tarjetaSeleccionada = opcionesTarjetasSpinner[position] as TarjetaCredito
+                when {
+                    tarjetaSeleccionada.companiaTarjeta == "Visa" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageDrawable(resources.getDrawable(R.drawable.ic_icons8_visa))
+                    tarjetaSeleccionada.companiaTarjeta == "Mastercard" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageDrawable(resources.getDrawable(R.drawable.ic_mastercard_logo))
+                    tarjetaSeleccionada.companiaTarjeta == "AmericanExpress" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageDrawable(resources.getDrawable(R.drawable.ic_icons8_american_express))
+
+                }
 
             }
         }

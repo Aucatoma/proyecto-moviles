@@ -135,8 +135,17 @@
             android:id="@+id/spinner_tarjetas"
             android:layout_width="220dp"
             android:layout_height="49dp"
+            android:layout_alignEnd="@+id/layout_pagar"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="89dp" />
+            android:layout_marginBottom="95dp" />
+
+        <ImageView
+            android:id="@+id/img_tarjeta_credito"
+            android:layout_width="65dp"
+            android:layout_height="49dp"
+            android:layout_alignBottom="@+id/spinner_tarjetas"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="48dp"
+            app:srcCompat="@drawable/ic_credit_card_solid" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
