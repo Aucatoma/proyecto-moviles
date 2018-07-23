@@ -319,12 +319,58 @@ class DBHandler {
     }
 
 
-    fun actualizar(){
+    fun actualizar(datos: Any): Boolean{
+        val dbWritable = dbOpenHelper!!.writableDatabase
 
+        when(datos){
+            is TarjetaCredito -> {
+                val values = ContentValues().apply {
+                    put(TablaTarjetaCredito.COL_COM_TARJETA, datos.companiaTarjeta)
+                    put(TablaTarjetaCredito.COL_NUM_TARJETA, datos.numeroTarjeta)
+                    put(TablaTarjetaCredito.COL_MES_TARJETA, datos.mesTarjeta)
+                    put(TablaTarjetaCredito.COL_ANIO_TARJETA, datos.anioTarjeta)
+                    put(TablaTarjetaCredito.COL_COD_SEGURIDAD, datos.codigoSeguridad)
+                }
+                val selection = "${TablaTarjetaCredito.COL_ID_TARJETA} LIKE ?"
+                val selectionArgs = arrayOf("${datos.id}")
+                val count = dbWritable.update(
+                        TablaTarjetaCredito.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                )
+                Log.i("RESULTADO_SQLITE", count.toString())
+                if(count >= 0)
+                    return@actualizar true
+            }
+            is Cliente -> {}
+            is Recorrido -> {}
+            is Foto -> {}
+            else -> return@actualizar false
+        }
+        dbWritable.close()
+        return false
     }
 
-    fun eliminar(tabla: String, selectionArgs: ArrayList<Pair<String, Any>>){
+    fun eliminar(tabla: String, id: String): Boolean{
+        val dbWritable = dbOpenHelper!!.writableDatabase
+        when(tabla){
+            TablaTarjetaCredito.TABLE_NAME -> {
+                Log.i("ELIMINAR", id)
+                val selection = "${TablaTarjetaCredito.COL_ID_TARJETA} LIKE ?"
+                val selectionArgs = arrayOf(id)
+                val deletedRows = dbWritable.delete(tabla, selection, selectionArgs)
+                Log.i("RESULTADO_SQLITE", deletedRows.toString())
+                dbWritable.close()
+                if(deletedRows >= 0)
+                    return@eliminar true
 
+            }
+            TablaFoto.TABLE_NAME -> {}
+            TablaCliente.TABLE_NAME -> { }
+            TablaRecorrido.TABLE_NAME -> {}
+        }
+        return false
     }
 
 }

@@ -5,11 +5,11 @@ import android.os.Parcelable
 import com.beust.klaxon.Json
 
 class TarjetaCredito (val id:Int = -1,
-                      val companiaTarjeta: String,
-                      val numeroTarjeta:String,
-                      val codigoSeguridad:String,
-                      val mesTarjeta:Int,
-                      val anioTarjeta:Int,
+                      var companiaTarjeta: String,
+                      var numeroTarjeta:String,
+                      var codigoSeguridad:String,
+                      var mesTarjeta:Int,
+                      var anioTarjeta:Int,
                       @Json(ignored = false) val recorridos:List<Recorrido>? = null,
                       val clienteId:Int = -1,
                       val createdAt:Long = 0,
