@@ -3,8 +3,8 @@
     <string name="title_activity_panel">FindCab</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Daniel Aucatoma</string>
-    <string name="nav_header_subtitle">daucatoma1996@gmail.com</string>
+    <string name="nav_header_title">%1$s! %1$s!</string>
+    <string name="nav_header_subtitle">%1$s!</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Configuraciones</string>
     <string name="title_activity_maps">Mapa</string>
