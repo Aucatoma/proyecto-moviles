@@ -14,8 +14,8 @@ class Recorrido (val id:Int,
                  val valorRecorrido: Double,
                  val tarjetaCreditoId:Int,
                  val conductor:Conductor? = null,
-                 val createdAt:Long,
-                 val updatedAt:Long) : Parcelable {
+                 val createdAt:Long = 0,
+                 val updatedAt:Long = 0) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),

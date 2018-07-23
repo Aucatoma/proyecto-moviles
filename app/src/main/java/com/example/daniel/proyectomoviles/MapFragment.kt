@@ -292,8 +292,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun crearRecorrido(): Boolean {
 
-
-
         recorrido = Recorrido(-1,
                 coordenadasOrigen[0].toDouble(),
                 coordenadasOrigen[1].toDouble(),

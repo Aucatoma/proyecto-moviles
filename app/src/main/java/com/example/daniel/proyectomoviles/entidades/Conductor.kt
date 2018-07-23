@@ -7,14 +7,14 @@ class Conductor(val id:Int,
                 val nombre:String,
                 val apellido:String,
                 val telefono:String,
-                val nombreUsuario:String,
-                val contraseniaUsuario:String,
-                val correoUsuario:String,
+                val nombreUsuario:String = "",
+                val contraseniaUsuario:String = "",
+                val correoUsuario:String = "",
                 val recorridos: List<Recorrido>? = null,
                 val autos:List<Auto>? = null,
                 val fotoId: Int = 0,
-                val createdAt: Long,
-                val updatedAt:Long) : Parcelable  {
+                val createdAt: Long = 0,
+                val updatedAt:Long = 0) : Parcelable  {
 
 
     constructor(parcel: Parcel) : this(

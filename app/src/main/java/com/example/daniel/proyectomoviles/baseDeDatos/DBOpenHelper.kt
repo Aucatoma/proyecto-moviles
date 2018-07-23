@@ -38,6 +38,7 @@ class DBOpenHelper(context: Context): SQLiteOpenHelper(context, Database.DB_NAME
                 ${TablaRecorrido.COL_ORI_LONGITUD} REAL NOT NULL,
                 ${TablaRecorrido.COL_DES_LATITUD} REAL NOT NULL,
                 ${TablaRecorrido.COL_DES_LONGITUD} REAL NOT NULL,
+                ${TablaRecorrido.COL_DIST_RECORRIDO} REAL NOT NULL,
                 ${TablaRecorrido.COL_EST_RECORRIDO} VARCHAR(1) NOT NULL,
                 ${TablaRecorrido.COL_FEC_RECORRIDO} VARCHAR(10) NOT NULL,
                 ${TablaRecorrido.COL_VAL_RECORRIDO} REAL NOT NULL,

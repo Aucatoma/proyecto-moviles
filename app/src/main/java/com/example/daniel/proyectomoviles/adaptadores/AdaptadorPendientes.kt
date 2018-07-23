@@ -30,14 +30,17 @@ class AdaptadorPendientes (internal var recorridos: ArrayList<Recorrido>, intern
         //Primero obtenemos el nombre de la dirección destino, segun la latitud y longitud destino
         val localizador = Geocoder(ctx)
         var direccionDestino : List<Address>
-        direccionDestino = ArrayList()
-        direccionDestino = localizador.getFromLocation(recorridos[position].destinoLatitud.toDouble(), recorridos[position].destinoLongitud.toDouble(),1)
+        direccionDestino = localizador.getFromLocation(recorridos[position].destinoLatitud, recorridos[position].destinoLongitud,1)
 
-        //Se coloca la dirección en el textView, ejemplo: Foch, Quito
-        holder.txtDestinoRecorrido.text =  direccionDestino[0].getAddressLine(0)
 
-        //Se coloca la fecha en la que se solicito el recorrido
-        holder.txtFechaRecorrido.text = recorridos[position].fechaRecorrido
+        if(direccionDestino.size!=0){
+            //Se coloca la dirección en el textView, ejemplo: Foch, Quito
+            holder.txtDestinoRecorrido.text =  direccionDestino[0].getAddressLine(0)
+
+            //Se coloca la fecha en la que se solicito el recorrido
+            holder.txtFechaRecorrido.text = recorridos[position].fechaRecorrido
+        }
+
 
     }
 

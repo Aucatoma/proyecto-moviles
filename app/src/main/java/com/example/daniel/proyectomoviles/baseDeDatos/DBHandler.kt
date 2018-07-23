@@ -57,9 +57,10 @@ class DBHandler {
                     put(TablaConductor.COL_APELLIDO, datos.apellido)
                     put(TablaConductor.COL_TELEFONO, datos.telefono)
                     put(TablaConductor.COL_CORREO_USUARIO, datos.correoUsuario)
+
                 }
                 val resultado = writableDatabase.insert(TablaConductor.TABLE_NAME, null, cv)
-                Log.i("RESULTADO_SQLITE", "$resultado")
+                Log.i("RESULTADO_SQLITE_C", "$resultado")
                 writableDatabase.close()
             }
             is Recorrido -> {
@@ -70,6 +71,7 @@ class DBHandler {
                     put(TablaRecorrido.COL_ORI_LONGITUD, datos.origenLongitud)
                     put(TablaRecorrido.COL_DES_LATITUD, datos.destinoLatitud)
                     put(TablaRecorrido.COL_DES_LONGITUD, datos.destinoLongitud)
+                    put(TablaRecorrido.COL_DIST_RECORRIDO,datos.distanciaRecorrido)
                     put(TablaRecorrido.COL_EST_RECORRIDO, datos.estadoRecorrido)
                     put(TablaRecorrido.COL_FEC_RECORRIDO, datos.fechaRecorrido)
                     put(TablaRecorrido.COL_VAL_RECORRIDO, datos.valorRecorrido)
@@ -141,11 +143,30 @@ class DBHandler {
                 when(tabla.toUpperCase()){
                     "${TablaCliente.TABLE_NAME}" -> resultado = obtenerCliente(this)
                     "${TablaTarjetaCredito.TABLE_NAME}" -> resultado = obtenerTarjeta(this)
+                    "${TablaConductor.TABLE_NAME}" -> resultado = obtenerConductor(this)
                     "${TablaFoto.TABLE_NAME}" -> resultado = obtenerFoto(this)
                 }
             }
         }
         return resultado
+    }
+
+    private fun obtenerConductor(cursor: Cursor): Conductor? {
+        var conductor:Conductor? = null
+        with(cursor){
+            val id = getInt(getColumnIndexOrThrow("${TablaConductor.COL_ID_CONDUCTOR}"))
+            val nombre = getString(getColumnIndexOrThrow("${TablaConductor.COL_NOMBRE}"))
+            val apellido = getString(getColumnIndexOrThrow("${TablaConductor.COL_APELLIDO}"))
+            val telefono = getString(getColumnIndexOrThrow("${TablaConductor.COL_TELEFONO}"))
+            conductor = Conductor(id = id,
+                    nombre = nombre,
+                    apellido = apellido,
+                    telefono = telefono)
+        }
+
+
+        return conductor
+
     }
 
 
@@ -183,6 +204,48 @@ class DBHandler {
 
         return tarjetaCredito
 
+
+    }
+
+    private fun obtenerRecorrido(cursor: Cursor): Recorrido? {
+
+        var recorrido: Recorrido? = null
+        with(cursor){
+            val id = getInt(getColumnIndexOrThrow("${TablaRecorrido.COL_ID_RECORRIDO}"))
+            val origenLatitud = getDouble(getColumnIndexOrThrow("${TablaRecorrido.COL_ORI_LATITUD}"))
+            val origenLongitud = getDouble(getColumnIndexOrThrow("${TablaRecorrido.COL_ORI_LONGITUD}"))
+            val detinoLatitud = getDouble(getColumnIndexOrThrow("${TablaRecorrido.COL_DES_LATITUD}"))
+            val destinoLongitud = getDouble(getColumnIndexOrThrow("${TablaRecorrido.COL_DES_LONGITUD}"))
+            val distanciaRecorrido = getDouble(getColumnIndexOrThrow("${TablaRecorrido.COL_DIST_RECORRIDO}"))
+            val estadoRecorrido = getString(getColumnIndexOrThrow("${TablaRecorrido.COL_EST_RECORRIDO}"))
+            val fechaRecorrido = getString(getColumnIndexOrThrow("${TablaRecorrido.COL_FEC_RECORRIDO}"))
+            val valorRecorrido = getDouble(getColumnIndexOrThrow("${TablaRecorrido.COL_VAL_RECORRIDO}"))
+            val tarjetaCreditoId = getInt(getColumnIndexOrThrow("${TablaRecorrido.COL_ID_TARJETA}"))
+            val conductor = getInt(getColumnIndexOrThrow("${TablaRecorrido.COL_ID_CONDUCTOR}"))
+
+            recorrido = Recorrido(id = id,
+                    origenLatitud = origenLatitud,
+                    origenLongitud = origenLongitud,
+                    destinoLatitud = detinoLatitud,
+                    destinoLongitud = destinoLongitud,
+                    distanciaRecorrido = distanciaRecorrido,
+                    estadoRecorrido = estadoRecorrido,
+                    fechaRecorrido = fechaRecorrido,
+                    valorRecorrido = valorRecorrido,
+                    tarjetaCreditoId = tarjetaCreditoId,
+                    conductor = Conductor(conductor,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            null,
+                            null,
+                            0))
+        }
+
+        return recorrido
 
     }
 
@@ -238,6 +301,12 @@ class DBHandler {
                         entidad.add(obtenerTarjeta(cursor)!!)
 
                     } while (cursor.moveToNext())
+                "${TablaRecorrido.TABLE_NAME}" ->
+                        do{
+                            entidad.add(obtenerRecorrido(cursor)!!)
+
+                        }while(cursor.moveToNext())
+
             }
 
 

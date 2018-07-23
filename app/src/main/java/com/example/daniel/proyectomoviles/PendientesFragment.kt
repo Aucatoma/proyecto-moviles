@@ -18,13 +18,20 @@ import android.util.Log
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaConductor
 import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaRecorrido
+import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaTarjetaCredito
+import com.example.daniel.proyectomoviles.entidades.Conductor
+import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeControllerActions
 
 class PendientesFragment : Fragment() {
 
-    lateinit var recyclerRecorrido: RecyclerView
+    private lateinit var recyclerRecorrido: RecyclerView
     lateinit var listaRecorridos: ArrayList<Recorrido>
+
+    lateinit var conductor: Conductor
+    lateinit var tarjetaCredito: TarjetaCredito
 
 
     lateinit var swipeController : SwipeController
@@ -72,7 +79,7 @@ class PendientesFragment : Fragment() {
             }
         })
 
-        var itemTouchhelper = ItemTouchHelper(swipeController)
+        val itemTouchhelper = ItemTouchHelper(swipeController)
         itemTouchhelper.attachToRecyclerView(recyclerRecorrido)
 
         recyclerRecorrido.addItemDecoration(object : RecyclerView.ItemDecoration() {
@@ -94,7 +101,6 @@ class PendientesFragment : Fragment() {
 
         if(materialDialog!=null){
 
-            //Es importante tomar la customView!!
             val view = materialDialog.customView
             llenarDetalle(view, recorrido)
         }
@@ -105,36 +111,48 @@ class PendientesFragment : Fragment() {
 
         val localizador = Geocoder(requireContext())
 
-        var direccionOrigen : List<Address>
-        var direccionDestino : List<Address>
-
-        direccionOrigen = ArrayList()
-        direccionDestino = ArrayList()
+        val direccionOrigen : List<Address>
+        val direccionDestino : List<Address>
 
         direccionOrigen = localizador.getFromLocation(recorrido.origenLatitud, recorrido.origenLongitud,1)
         direccionDestino = localizador.getFromLocation(recorrido.destinoLatitud, recorrido.destinoLongitud,1)
 
         if(view!=null){
 
-            var txtOrigen:TextView = view.findViewById(R.id.txt_origen_input)
-            var txtDestino:TextView = view.findViewById(R.id.txt_destino_input)
-            var txtDistancia:TextView = view.findViewById(R.id.txt_distancia_input)
-            var txtFecha:TextView = view.findViewById(R.id.txt_fecha_input)
-            var txtCoductor:TextView = view.findViewById(R.id.txt_conductor_input)
-            var txtMetodoPago:TextView = view.findViewById(R.id.txt_metodo_pago_input)
-            var txtCostoViaje:TextView = view.findViewById(R.id.txt_costo_viaje)
+            val txtOrigen:TextView = view.findViewById(R.id.txt_origen_input)
+            val txtDestino:TextView = view.findViewById(R.id.txt_destino_input)
+            val txtDistancia:TextView = view.findViewById(R.id.txt_distancia_input)
+            val txtFecha:TextView = view.findViewById(R.id.txt_fecha_input)
+            val txtCoductor:TextView = view.findViewById(R.id.txt_conductor_input)
+            val txtMetodoPago:TextView = view.findViewById(R.id.txt_metodo_pago_input)
+            val txtCostoViaje:TextView = view.findViewById(R.id.txt_costo_viaje)
 
             txtOrigen.text = direccionOrigen[0].getAddressLine(0)
             txtDestino.text = direccionDestino[0].getAddressLine(0)
-            txtDistancia.text = String.format("%.2f",recorrido.distanciaRecorrido)
+            txtDistancia.text = String.format("%.2f",recorrido.distanciaRecorrido)+" m"
             txtFecha.text = recorrido.fechaRecorrido
-            txtCoductor.text = "To do"
-            txtMetodoPago.text = "To do"
+
+            if(recorrido.conductor!=null){
+                txtCoductor.text = obtenerConductor(recorrido.conductor.id)
+            }
+
+            txtMetodoPago.text = obtenerTarjetaCredito(recorrido.tarjetaCreditoId)
             txtCostoViaje.text = String.format("%.3f",recorrido.valorRecorrido)
 
         }
 
 
+    }
+
+    private fun obtenerConductor(id: Int): String? {
+
+        conductor = DBHandler.getInstance(requireContext())!!.obtenerUno(TablaConductor.TABLE_NAME, arrayOf(Pair(TablaConductor.COL_ID_CONDUCTOR,"${id}"))) as Conductor
+        return "${conductor.nombre} ${conductor.apellido}"
+    }
+
+    private fun obtenerTarjetaCredito(id: Int): String? {
+        tarjetaCredito = DBHandler.getInstance(requireContext())!!.obtenerUno(TablaTarjetaCredito.TABLE_NAME, arrayOf(Pair(TablaTarjetaCredito.COL_ID_TARJETA, "${id}"))) as TarjetaCredito
+        return tarjetaCredito.numeroTarjeta
     }
 
     private fun enviarPendienteAHistorial() {
@@ -147,6 +165,8 @@ class PendientesFragment : Fragment() {
 
         //Aqui se consultaria todos los recorridos del cliente y lo meteria en la listaRecorridos
        listaRecorridos = DBHandler.getInstance(requireContext())!!.obtenerDatos(TablaRecorrido.TABLE_NAME, arrayOf(Pair(TablaRecorrido.COL_EST_RECORRIDO, "P"))) as ArrayList<Recorrido>
+        //listaRecorridos.forEach { recorrido:Recorrido -> Log.i("MI_CONDUCTOR", "LOS ID'S SON: "+recorrido.conductor!!.id) }
+
 
     }
 
