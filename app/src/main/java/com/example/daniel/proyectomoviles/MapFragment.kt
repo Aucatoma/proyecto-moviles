@@ -412,7 +412,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun dibujarRuta() {
 
         //Creacion de un objeto polyLine options
-
         val options = PolylineOptions()
         options.color(R.color.colorRuta)
         options.width(8f)

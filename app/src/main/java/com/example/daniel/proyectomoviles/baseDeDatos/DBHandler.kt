@@ -60,7 +60,7 @@ class DBHandler {
 
                 }
                 val resultado = writableDatabase.insert(TablaConductor.TABLE_NAME, null, cv)
-                Log.i("RESULTADO_SQLITE_C", "$resultado")
+                Log.i("RESULTADO_SQLITE", "$resultado")
                 writableDatabase.close()
             }
             is Recorrido -> {
@@ -316,11 +316,6 @@ class DBHandler {
 
 
         return entidad
-
-
-
-
-
     }
 
 

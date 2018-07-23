@@ -11,19 +11,16 @@ import android.widget.TextView
 import com.example.daniel.proyectomoviles.R
 import com.example.daniel.proyectomoviles.entidades.Recorrido
 
+class AdaptadorHistorial (internal var recorridos: ArrayList<Recorrido>, internal var ctx: Context) : RecyclerView.Adapter<AdaptadorHistorial.ViewHolderHistorial>() {
 
-class AdaptadorPendientes (internal var recorridos: ArrayList<Recorrido>, internal var ctx: Context) : RecyclerView.Adapter<AdaptadorPendientes.ViewHolderPendientes>(){
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderPendientes {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdaptadorHistorial.ViewHolderHistorial {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view_pendiente,null,false)
-        return ViewHolderPendientes(view)
+        return ViewHolderHistorial(view)
     }
 
-    override fun getItemCount(): Int {return recorridos.size}
-
-    override fun onBindViewHolder(holder: ViewHolderPendientes, position: Int) {
-
+    override fun onBindViewHolder(holder: ViewHolderHistorial, position: Int) {
 
         //Primero obtenemos el nombre de la dirección destino, segun la latitud y longitud destino
         val localizador = Geocoder(ctx)
@@ -42,10 +39,14 @@ class AdaptadorPendientes (internal var recorridos: ArrayList<Recorrido>, intern
 
     }
 
-    inner class ViewHolderPendientes(itemView: View): RecyclerView.ViewHolder(itemView) {
+    override fun getItemCount(): Int {return recorridos.size}
 
-        internal var txtDestinoRecorrido:TextView
-        internal var txtFechaRecorrido:TextView
+
+
+    inner class ViewHolderHistorial(itemView: View): RecyclerView.ViewHolder(itemView)  {
+
+        internal var txtDestinoRecorrido: TextView
+        internal var txtFechaRecorrido: TextView
 
         init {
 
@@ -55,8 +56,5 @@ class AdaptadorPendientes (internal var recorridos: ArrayList<Recorrido>, intern
 
         }
 
-
     }
-
-
 }

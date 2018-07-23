@@ -102,4 +102,10 @@
     <string name="boton_ver_mas">Más</string>
     <string name="boton_emitir_pago">Pagar</string>
 
+    <!--Strings de RV Historial-->
+    <string name="boton_eliminar_recorrido">Eliminar</string>
+
+    <!--String AlertDialog Detalle recorridos en Pendiente e Historial-->
+    <string name="cabecera_detalle_recorrido">Detalle</string>
+
 </resources>
