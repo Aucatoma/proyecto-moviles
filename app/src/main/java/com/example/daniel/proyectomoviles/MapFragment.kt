@@ -246,9 +246,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 tarjetaSeleccionada = opcionesTarjetasSpinner[position] as TarjetaCredito
                 when {
-                    tarjetaSeleccionada.companiaTarjeta == "Visa" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageDrawable(resources.getDrawable(R.drawable.ic_icons8_visa))
-                    tarjetaSeleccionada.companiaTarjeta == "Mastercard" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageDrawable(resources.getDrawable(R.drawable.ic_mastercard_logo))
-                    tarjetaSeleccionada.companiaTarjeta == "AmericanExpress" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageDrawable(resources.getDrawable(R.drawable.ic_icons8_american_express))
+                    tarjetaSeleccionada.companiaTarjeta == "Visa" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_icons8_visa)
+                    tarjetaSeleccionada.companiaTarjeta == "Mastercard" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_mastercard_logo)
+                    tarjetaSeleccionada.companiaTarjeta == "American Express" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_icons8_american_express)
 
                 }
 
