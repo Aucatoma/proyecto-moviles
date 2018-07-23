@@ -141,11 +141,12 @@
 
         <ImageView
             android:id="@+id/img_tarjeta_credito"
-            android:layout_width="65dp"
-            android:layout_height="49dp"
-            android:layout_alignBottom="@+id/spinner_tarjetas"
+            android:layout_width="50dp"
+            android:layout_height="27dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="48dp"
+            android:layout_marginBottom="105dp"
+            android:layout_marginStart="56dp"
             app:srcCompat="@drawable/ic_credit_card_solid" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
