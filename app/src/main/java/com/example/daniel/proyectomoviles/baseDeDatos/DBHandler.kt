@@ -386,7 +386,17 @@ class DBHandler {
             }
             TablaFoto.TABLE_NAME -> {}
             TablaCliente.TABLE_NAME -> { }
-            TablaRecorrido.TABLE_NAME -> {}
+            TablaRecorrido.TABLE_NAME -> {
+                Log.i("ELIMINAR", id)
+                val selection = "${TablaRecorrido.COL_ID_RECORRIDO} LIKE ?"
+                val selectionArgs = arrayOf(id)
+                val deletedRows = dbWritable.delete(tabla, selection, selectionArgs)
+                Log.i("RESULTADO_SQLITE", deletedRows.toString())
+                dbWritable.close()
+                if(deletedRows >= 0)
+                    return@eliminar true
+
+            }
         }
         return false
     }

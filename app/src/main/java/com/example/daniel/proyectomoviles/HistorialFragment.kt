@@ -9,10 +9,12 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.example.daniel.proyectomoviles.adaptadores.AdaptadorHistorial
 import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
@@ -22,6 +24,7 @@ import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaTarjetaCr
 import com.example.daniel.proyectomoviles.entidades.Conductor
 import com.example.daniel.proyectomoviles.entidades.Recorrido
 import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
+import com.example.daniel.proyectomoviles.http.HttpRequest
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeController
 import com.example.daniel.proyectomoviles.swipeUtilities.SwipeControllerActions
 
@@ -90,6 +93,18 @@ class HistorialFragment : Fragment() {
     }
 
     private fun eliminarRecorrido(recorrido: Recorrido) {
+
+        HttpRequest.eliminarDato("Recorrido","${recorrido.id}",{error, datos ->
+
+            if(error){
+                Toast.makeText(requireContext(),"No se pudo eliminar", Toast.LENGTH_SHORT).show()
+            }else{
+                Log.i("RESPUESTA_REGISTRO", datos)
+                DBHandler.getInstance(activity!!)!!.eliminar(TablaRecorrido.TABLE_NAME,"${recorrido.id}")
+                Toast.makeText(requireContext(),"Se eliminó correctamente", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
 
 
