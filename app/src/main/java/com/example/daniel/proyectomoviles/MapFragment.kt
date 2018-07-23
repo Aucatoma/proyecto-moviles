@@ -196,7 +196,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 //Si no es null, se llena de AlertDialog
                 if(materialDialog!=null){
                     //Es importante tomar la customView!!
-                    val view = materialDialog.customView
+                    val view = materialDialog.customView as View
                     llenarAlertDialog(view)
                 }
 
@@ -214,9 +214,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    private fun inicializarSpinner(view: View) {
+    private fun inicializarSpinner(customView: View) {
 
-        val spinner:Spinner = view.findViewById(R.id.spinner_tarjetas)
+        val spinner:Spinner = customView.findViewById(R.id.spinner_tarjetas)
 
         val opcionesTarjetasSpinner:ArrayList<Any>
         opcionesTarjetasSpinner = ArrayList()
@@ -237,21 +237,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val typedArray = resources.obtainTypedArray(R.array.drawable_tarjetas)
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //nada
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
-                tarjetaSeleccionada = opcionesTarjetasSpinner[position] as TarjetaCredito
+        spinner.onItemSelectedListener{
+            onItemSelected { adapterView, view, i, l ->
+                tarjetaSeleccionada = opcionesTarjetasSpinner[i] as TarjetaCredito
                 when {
-                    tarjetaSeleccionada.companiaTarjeta == "Visa" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_icons8_visa)
-                    tarjetaSeleccionada.companiaTarjeta == "Mastercard" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_mastercard_logo)
-                    tarjetaSeleccionada.companiaTarjeta == "American Express" -> view!!.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_icons8_american_express)
+                    tarjetaSeleccionada.companiaTarjeta == "Visa" -> customView.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_icons8_visa)
+                    tarjetaSeleccionada.companiaTarjeta == "Mastercard" -> customView.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_mastercard_logo)
+                    tarjetaSeleccionada.companiaTarjeta == "American Express" -> customView.findViewById<ImageView>(R.id.img_tarjeta_credito).setImageResource(R.drawable.ic_icons8_american_express)
 
                 }
-
             }
         }
     }
