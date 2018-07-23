@@ -43,6 +43,7 @@ class PendientesFragment : Fragment() {
     lateinit var swipeController : SwipeController
 
     lateinit var recorridoActualizado: Deferred<Boolean>
+    lateinit var mRecorrido: Recorrido
     var recorridoJson = ""
     private val jsonParser = JsonParser()
 
@@ -167,11 +168,9 @@ class PendientesFragment : Fragment() {
 
     private fun actualizarRecorrido(recorrido: Recorrido) {
 
-
-
         kotlinx.coroutines.experimental.async(UI){
             recorridoActualizado = bg {
-                crearRecorrido(recorrido)
+                cambiarEstadoRecorrido(recorrido)
             }
             if(recorridoActualizado.await()){
                 bg { HttpRequest.actualizarDato("Recorrido","${recorrido.id}",recorridoJson, {error, datos ->
@@ -180,7 +179,7 @@ class PendientesFragment : Fragment() {
                         Toast.makeText(requireContext(),"Error al actualizar", Toast.LENGTH_SHORT).show()
                     }else{
                         Log.i("RESPUESTA_REGISTRO", datos)
-                        DBHandler.getInstance(requireContext())!!.actualizar()
+                        DBHandler.getInstance(requireContext())!!.actualizar(mRecorrido)
                         val historialFragment = HistorialFragment()
                         requireActivity().supportFragmentManager.beginTransaction().replace(R.id.mainLayout, historialFragment).addToBackStack(null).commit()
 
@@ -192,15 +191,12 @@ class PendientesFragment : Fragment() {
 
             }
         }
-
-
-
-
     }
 
-    private fun crearRecorrido(recorrido: Recorrido): Boolean {
+    private fun cambiarEstadoRecorrido(recorrido: Recorrido): Boolean {
 
         recorrido.estadoRecorrido = "F"
+        mRecorrido = recorrido
         recorridoJson = jsonParser.recorridoToJson(recorrido)
 
         return true

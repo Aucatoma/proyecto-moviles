@@ -344,7 +344,25 @@ class DBHandler {
                     return@actualizar true
             }
             is Cliente -> {}
-            is Recorrido -> {}
+            is Recorrido -> {
+
+                val values = ContentValues().apply {
+                    put(TablaRecorrido.COL_EST_RECORRIDO, datos.estadoRecorrido)
+
+                }
+                val selection = "${TablaRecorrido.COL_ID_RECORRIDO} LIKE ?"
+                val selectionArgs = arrayOf("${datos.id}")
+                val count = dbWritable.update(
+                        TablaRecorrido.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                )
+                Log.i("RESULTADO_SQLITE", count.toString())
+                if(count >= 0)
+                    return@actualizar true
+
+            }
             is Foto -> {}
             else -> return@actualizar false
         }
