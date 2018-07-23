@@ -179,7 +179,7 @@ class PendientesFragment : Fragment() {
                         Toast.makeText(requireContext(),"Error al actualizar", Toast.LENGTH_SHORT).show()
                     }else{
                         Log.i("RESPUESTA_REGISTRO", datos)
-                        DBHandler.getInstance(requireContext())!!.actualizar(mRecorrido)
+                        DBHandler.getInstance(activity!!)!!.actualizar(mRecorrido)
                         val historialFragment = HistorialFragment()
                         requireActivity().supportFragmentManager.beginTransaction().replace(R.id.mainLayout, historialFragment).addToBackStack(null).commit()
 
