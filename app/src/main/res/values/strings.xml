@@ -6,7 +6,7 @@
     <string name="nav_header_title">%1$s! %1$s!</string>
     <string name="nav_header_subtitle">%1$s!</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Configuraciones</string>
+    <string name="action_log_out">Cerrar sesión</string>
     <string name="title_activity_maps">Mapa</string>
 
     <!-- TODO: Remove or change this placeholder text -->
