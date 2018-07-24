@@ -1,6 +1,7 @@
 package com.example.daniel.proyectomoviles
 
 
+import android.content.Intent
 import android.graphics.Canvas
 import android.location.Address
 import android.location.Geocoder
@@ -40,6 +41,14 @@ class HistorialFragment : Fragment() {
 
     lateinit var swipeController : SwipeController
 
+
+    //-------------DATOS PARA EMAIL-----------------//
+    var origenParaEmail = ""
+    var destinoParaEmail = ""
+    var costoRecorridoParaEmail = ""
+    var distanciaRecorridoParaEmail = ""
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view:View = inflater.inflate(R.layout.fragment_pendientes, container, false)
@@ -68,10 +77,10 @@ class HistorialFragment : Fragment() {
 
             override fun onRightClicked(position: Int) {
 
-                eliminarRecorrido(listaRecorridos[position])
-                adaptador.recorridos.removeAt(position)
+                eliminarRecorrido(listaRecorridos[position], position, adaptador)
+                /*adaptador.recorridos.removeAt(position)
                 adaptador.notifyItemRemoved(position)
-                adaptador.notifyItemRangeChanged(position,adaptador.itemCount)
+                adaptador.notifyItemRangeChanged(position,adaptador.itemCount)*/
             }
 
             override fun onLeftClicked(position: Int) {
@@ -92,7 +101,7 @@ class HistorialFragment : Fragment() {
 
     }
 
-    private fun eliminarRecorrido(recorrido: Recorrido) {
+    private fun eliminarRecorrido(recorrido: Recorrido, position: Int, adaptador: AdaptadorHistorial) {
 
         HttpRequest.eliminarDato("Recorrido","${recorrido.id}",{error, datos ->
 
@@ -101,6 +110,9 @@ class HistorialFragment : Fragment() {
             }else{
                 Log.i("RESPUESTA_REGISTRO", datos)
                 DBHandler.getInstance(activity!!)!!.eliminar(TablaRecorrido.TABLE_NAME,"${recorrido.id}")
+                adaptador.recorridos.removeAt(position)
+                adaptador.notifyItemRemoved(position)
+                adaptador.notifyItemRangeChanged(position,adaptador.itemCount)
 
             }
 
@@ -133,6 +145,17 @@ class HistorialFragment : Fragment() {
 
     private fun compartirRecorrido() {
 
+        val address = arrayOf("","")
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/html"
+        intent.putExtra(Intent.EXTRA_EMAIL,address)
+        intent.putExtra(Intent.EXTRA_SUBJECT,"")
+        intent.putExtra(Intent.EXTRA_TEXT,"Origen:   ${origenParaEmail}\n" +
+                                                "Destino:   ${destinoParaEmail}\n"+
+                                                "Costo:     ${costoRecorridoParaEmail}\n"+
+                                                "Distancia: ${distanciaRecorridoParaEmail}\n")
+        startActivity(intent)
+
     }
 
     private fun llenarDetalle(view: View?, recorrido: Recorrido) {
@@ -159,13 +182,21 @@ class HistorialFragment : Fragment() {
             txtDestino.text = direccionDestino[0].getAddressLine(0)
             txtDistancia.text = String.format("%.2f",recorrido.distanciaRecorrido)+" m"
             txtFecha.text = recorrido.fechaRecorrido
+            txtCostoViaje.text = String.format("%.3f",recorrido.valorRecorrido)
+
+            //------------SE ALMACENAN LOS DATOS PARA COMPARTIR EN EMAIL-------------------//
+            origenParaEmail = direccionOrigen[0].getAddressLine(0)
+            destinoParaEmail = direccionDestino[0].getAddressLine(0)
+            distanciaRecorridoParaEmail = String.format("%.2f",recorrido.distanciaRecorrido)+" m"
+            costoRecorridoParaEmail = String.format("%.3f",recorrido.valorRecorrido)
+
 
             if(recorrido.conductor!=null){
                 txtCoductor.text = obtenerConductor(recorrido.conductor.id)
             }
 
             txtMetodoPago.text = obtenerTarjetaCredito(recorrido.tarjetaCreditoId)
-            txtCostoViaje.text = String.format("%.3f",recorrido.valorRecorrido)
+
 
         }
 
