@@ -370,6 +370,17 @@ class DBHandler {
         return false
     }
 
+    fun eliminar_log_out(): Boolean{
+        val dbWritable = dbOpenHelper!!.writableDatabase
+        dbWritable.execSQL("DELETE FROM ${TablaCliente.TABLE_NAME}")
+        dbWritable.execSQL("DELETE FROM ${TablaConductor.TABLE_NAME}")
+        dbWritable.execSQL("DELETE FROM ${TablaFoto.TABLE_NAME}")
+        dbWritable.execSQL("DELETE FROM ${TablaTarjetaCredito.TABLE_NAME}")
+        dbWritable.execSQL("DELETE FROM ${TablaRecorrido.TABLE_NAME}")
+        dbWritable.close()
+        return true
+    }
+
     fun eliminar(tabla: String, id: String): Boolean{
         val dbWritable = dbOpenHelper!!.writableDatabase
         when(tabla){

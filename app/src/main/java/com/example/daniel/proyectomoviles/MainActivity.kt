@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), OnNextArrowClickedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
-
+        //setContentView(R.layout.splash_screen)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

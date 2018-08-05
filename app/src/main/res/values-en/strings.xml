@@ -120,5 +120,13 @@
     <string name="campo_conductor">Driver</string>
     <string name="boton_compartir">Share</string>
 
+    <!-- Cierre de sesión -->
+    <string name="log_out_title">Log out</string>
+    <string name="log_out_content">Do you want to log out?</string>
+    <string name="log_out_yes">Yes</string>
+    <string name="log_out_no">No</string>
+
+    <string name="loading">Fetching data</string>
+    <string name="delete_data_que">¿Delete data?</string>
 
 </resources>

@@ -53,12 +53,12 @@ class AdaptadorTarjetasFrag(private val myDataset: ArrayList<TarjetaCredito>, va
 
 
         fun crearDialogo() {
-            builder.setMessage("¿Eliminar datos?")
-                    .setPositiveButton("Sí", { dialog, which ->
+            builder.setMessage(R.string.delete_data_que)
+                    .setPositiveButton(R.string.log_out_yes, { dialog, which ->
                         eliminarAplicacion(tarjeta)
                         true
                     })
-                    .setNegativeButton("No", { dialog, which ->
+                    .setNegativeButton(R.string.log_out_no, { dialog, which ->
                         true
                     })
             val dialogo = builder.create()

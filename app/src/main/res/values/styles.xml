@@ -31,7 +31,7 @@
 
 
     <style name="AppTheme.Launcher">
-        <item name="android:windowBackground">@drawable/logo</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.Launcher.NoActionBar">

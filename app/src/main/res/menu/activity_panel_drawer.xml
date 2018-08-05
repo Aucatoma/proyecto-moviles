@@ -20,6 +20,10 @@
             android:id="@+id/nav_historial"
             android:icon="@drawable/ic_history_solid"
             android:title="@string/opcion_historial" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:title="@string/action_log_out"
+            android:icon="@drawable/ic_sign_out_alt_solid" />
     </group>
 
 

@@ -121,5 +121,12 @@
     <string name="campo_conductor">Conductor</string>
     <string name="boton_compartir">Compartir</string>
 
+    <!-- Cierre de sesión -->
+    <string name="log_out_title">Cerrar sesión</string>
+    <string name="log_out_content">¿Seguro desea cerrar sesión?</string>
+    <string name="log_out_yes">Sí</string>
+    <string name="log_out_no">No</string>
 
+    <string name="loading">Cargando contenido</string>
+    <string name="delete_data_que">¿Eliminar datos?</string>
 </resources>

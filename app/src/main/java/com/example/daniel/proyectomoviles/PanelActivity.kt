@@ -1,5 +1,6 @@
 package com.example.daniel.proyectomoviles
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -10,8 +11,10 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.example.daniel.proyectomoviles.baseDeDatos.DBHandler
 import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaCliente
 import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaFoto
@@ -20,6 +23,7 @@ import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.fragments.UserFragment
 import com.example.daniel.proyectomoviles.utilities.ImageFileHandler
 import kotlinx.android.synthetic.main.activity_panel.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.app_bar_panel.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
@@ -89,15 +93,7 @@ class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.action_log_out -> return true
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
@@ -131,9 +127,29 @@ class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 transactionManager.replace(R.id.mainLayout, historialFragment)
                 transactionManager.commit()
             }
+            R.id.nav_log_out -> {
+
+                val dialog = MaterialDialog.Builder(this)
+                        .title(R.string.log_out_title)
+                        .content(R.string.log_out_content)
+                        .positiveText(R.string.log_out_yes)
+                        .negativeText(R.string.log_out_no)
+                        .onPositive { dialog, which ->
+                            if(DBHandler.getInstance(this.baseContext)!!.eliminar_log_out()){
+                                irActividadLogin()
+                                finish()
+                            }
+                        }
+                        .show()
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun irActividadLogin(){
+        val intent = Intent(this.baseContext, MainActivity::class.java)
+        startActivity(intent)
     }
 }

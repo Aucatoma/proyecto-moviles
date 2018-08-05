@@ -176,7 +176,7 @@ class AuthFragment : Fragment() {
             textView_frag_auth_feed.text = resources.getString(R.string.sign_in_auth_error_feedback)
             logging_in = false
         }else{
-            activity!!.setContentView(R.layout.activity_main)
+            activity!!.setContentView(R.layout.content_loading)
             Toast.makeText(activity!!.baseContext, resources.getString(R.string.sign_in_auth_logged_success), Toast.LENGTH_LONG).show()
             textView_frag_auth_feed.text = ""
        //     jsonParser.jsonToCliente(datos)
