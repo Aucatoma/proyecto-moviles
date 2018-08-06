@@ -129,4 +129,13 @@
 
     <string name="loading">Cargando contenido</string>
     <string name="delete_data_que">¿Eliminar datos?</string>
+
+    <!-- Actualización de datos de cliente-->
+    <string name="update_cliente_error">Error al actualizar datos</string>
+    <string name="update_cliente_error_img">Error al actualizar imagen</string>
+    <string name="update_cliente_success">Datos actualizados</string>
+    <string name="update_question">¿Desea guardar los cambios?</string>
+    <string name="update_state">Actualizando datos ...</string>
+
+
 </resources>

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowId
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -21,6 +22,7 @@ import com.example.daniel.proyectomoviles.baseDeDatos.esquemaBase.TablaFoto
 import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.fragments.UserFragment
+import com.example.daniel.proyectomoviles.interfaces.OnImageChanged
 import com.example.daniel.proyectomoviles.utilities.ImageFileHandler
 import kotlinx.android.synthetic.main.activity_panel.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -32,8 +34,7 @@ import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
 
 
-class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
+class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnImageChanged {
 
     lateinit var nav_foto: ImageView
 
@@ -146,6 +147,16 @@ class PanelActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun imageChanged(id: String) {
+        val foto = DBHandler.getInstance(this)!!.obtenerUno(TablaFoto.TABLE_NAME, arrayOf(Pair(TablaFoto.COL_ID_FOTO, id))) as Foto
+        async(UI){
+            val bitmap: Deferred<Bitmap> = bg {
+                ImageFileHandler.base64ToBitmap(foto.datos)
+            }
+            afterConversion(bitmap.await())
+        }
     }
 
     fun irActividadLogin(){

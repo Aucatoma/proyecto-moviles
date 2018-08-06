@@ -129,4 +129,11 @@
     <string name="loading">Fetching data</string>
     <string name="delete_data_que">¿Delete data?</string>
 
+    <!-- Actualización de datos de cliente-->
+    <string name="update_cliente_error">Couldn\'t update data</string>
+    <string name="update_cliente_error_img">Couldn\'t update photo</string>
+    <string name="update_cliente_success">Data updated</string>
+    <string name="update_question">¿Save changes?</string>
+    <string name="update_state">Saving data ...</string>
+
 </resources>

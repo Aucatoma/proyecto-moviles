@@ -33,6 +33,16 @@ class JsonParser {
             }""".trim().trimIndent()
     }
 
+    fun clienteJsonUpdate(cliente: Cliente): String {
+        return """{
+            "nombre":"${cliente.nombre}",
+            "apellido":"${cliente.apellido}",
+            "telefono": "${cliente.telefono}",
+            "nombreUsuario": "${cliente.nombreUsuario}",
+            "correoUsuario":"${cliente.correoUsuario}"
+        }""".trimIndent().trim()
+    }
+
     fun fotoToJson(foto: Foto): String{
         return """
             {

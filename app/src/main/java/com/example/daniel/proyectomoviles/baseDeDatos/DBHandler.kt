@@ -339,11 +339,33 @@ class DBHandler {
                         selection,
                         selectionArgs
                 )
+                dbWritable.close()
                 Log.i("RESULTADO_SQLITE", count.toString())
                 if(count >= 0)
                     return@actualizar true
             }
-            is Cliente -> {}
+            is Cliente -> {
+                val values = ContentValues().apply {
+                    put(TablaCliente.COL_NOMBRE, datos.nombre)
+                    put(TablaCliente.COL_APELLIDO, datos.apellido)
+                    put(TablaCliente.COL_NOM_USUARIO, datos.nombreUsuario)
+                    put(TablaCliente.COL_CORREO_USUARIO, datos.correoUsuario)
+                    put(TablaCliente.COL_TELEFONO, datos.telefono)
+
+                }
+                val selection = "${TablaCliente.COL_ID_CLIENTE} LIKE ?"
+                val selectionArgs = arrayOf("${datos.id}")
+                val count = dbWritable.update(
+                        TablaCliente.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                )
+                dbWritable.close()
+                Log.i("RESULTADO_SQLITE", count.toString())
+                if(count >= 0)
+                    return@actualizar true
+            }
             is Recorrido -> {
 
                 val values = ContentValues().apply {
@@ -358,12 +380,31 @@ class DBHandler {
                         selection,
                         selectionArgs
                 )
+                dbWritable.close()
                 Log.i("RESULTADO_SQLITE", count.toString())
                 if(count >= 0)
                     return@actualizar true
 
             }
-            is Foto -> {}
+            is Foto -> {
+                val byteArray = Base64.decode(datos.datos, Base64.NO_WRAP or Base64.URL_SAFE)
+                val values = ContentValues().apply {
+                    put(TablaFoto.COL_FOTO, byteArray)
+                    put(TablaFoto.COL_EXT, datos.extension)
+                }
+                val selection = "${TablaFoto.COL_ID_FOTO} LIKE ?"
+                val selectionArgs = arrayOf("${datos.id}")
+                val count = dbWritable.update(
+                        TablaFoto.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                )
+                Log.i("RESULTADO_SQLITE", count.toString())
+                dbWritable.close()
+                if(count >= 0)
+                    return@actualizar true
+            }
             else -> return@actualizar false
         }
         dbWritable.close()

@@ -32,6 +32,7 @@ import com.example.daniel.proyectomoviles.entidades.Cliente
 import com.example.daniel.proyectomoviles.entidades.Foto
 import com.example.daniel.proyectomoviles.entidades.TarjetaCredito
 import com.example.daniel.proyectomoviles.http.HttpRequest
+import com.example.daniel.proyectomoviles.interfaces.OnImageChanged
 import com.example.daniel.proyectomoviles.parser.JsonParser
 import com.example.daniel.proyectomoviles.utilities.ImageFileHandler
 import kotlinx.android.synthetic.main.fragment_auth_fragment.*
@@ -40,6 +41,8 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.image
+import org.jetbrains.anko.imageBitmap
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
 import org.jetbrains.anko.support.v4.act
 import java.io.File
@@ -58,6 +61,7 @@ class UserFragment : Fragment() {
     val jsonParser = JsonParser()
     var mensajeFallo: Int = 0
     var mensajeExito: Int = 0
+    lateinit var mListener: OnImageChanged
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,9 +90,11 @@ class UserFragment : Fragment() {
             adapter = viewAdapter
         }
 
+        pgrBar_frag_user_photo.visibility = View.GONE
+        pgrBar_frag_user_save.visibility = View.GONE
 
         llenarVista()
-
+        blockUI()
         btn_usu_frag_save.visibility = View.GONE
         imgView_usu_frag_take.visibility = View.GONE
 
@@ -126,6 +132,7 @@ class UserFragment : Fragment() {
             btn_usu_frag_edit.visibility = View.GONE
             btn_usu_frag_save.visibility = View.VISIBLE
             imgView_usu_frag_take.visibility = View.VISIBLE
+            enableUI()
         }
 
         btn_usu_frag_save.setOnClickListener {
@@ -133,6 +140,61 @@ class UserFragment : Fragment() {
             btn_usu_frag_save.visibility = View.GONE
             btn_usu_frag_edit.visibility = View.VISIBLE
             imgView_usu_frag_take.visibility = View.GONE
+            blockUI()
+            Toast.makeText(activity!!.baseContext, R.string.update_state, Toast.LENGTH_SHORT).show()
+            pgrBar_frag_user_save.visibility = View.VISIBLE
+            val cliente = Cliente(
+                    id = this.cliente.id,
+                    nombre = editText__usu_frag_name.text.toString(),
+                    apellido = editText_usu_frag_last.text.toString(),
+                    correoUsuario = editText_usu_frag_email.text.toString(),
+                    nombreUsuario = editText_usu_frag_username.text.toString(),
+                    telefono = editText_usu_frag_mobile.text.toString()
+            )
+
+            val clienteJsonUpdate = jsonParser.clienteJsonUpdate(cliente)
+            Log.i("CLIENTE A ACTUALIZAR", clienteJsonUpdate)
+
+            bg{
+            HttpRequest.actualizarDato("cliente", "${cliente.id}", clienteJsonUpdate, {
+                error, datos ->
+                if(error){
+                    Toast.makeText(activity!!.baseContext, R.string.update_cliente_error, Toast.LENGTH_LONG).show()
+                    Log.i("Entró?", "jajaja1")
+                    pgrBar_frag_user_save.visibility = View.GONE
+                    true
+                }else{
+                    if(DBHandler.getInstance(activity!!.baseContext)!!.actualizar(cliente)){
+                        if(!this.imagePath.equals("")) {
+                            val foto = Foto(
+                                    id = this.foto.id,
+                                    datos = ImageFileHandler.bitmapToB64String(ImageFileHandler.fileToBitmap(File(this.imagePath))),
+                                    extension = "jpg"
+                            )
+                            val fotoJson = jsonParser.fotoToJson(foto)
+                            HttpRequest.actualizarDato("foto", "${foto.id}", fotoJson, {
+                                error, datos ->
+                                if(error){
+                                    Toast.makeText(activity!!.baseContext, R.string.update_cliente_error_img, Toast.LENGTH_LONG).show()
+                                    pgrBar_frag_user_save.visibility = View.GONE
+                                }else{
+                                    if(DBHandler.getInstance(activity!!.baseContext)!!.actualizar(foto)){
+                                        Toast.makeText(activity!!.baseContext, R.string.update_cliente_success, Toast.LENGTH_LONG).show()
+                                        mListener.imageChanged("${foto.id}")
+                                        Log.i("FOTO A ACTUALIZAR", fotoJson)
+                                    }
+                                    pgrBar_frag_user_save.visibility = View.GONE
+                                }
+                            })
+                        }else{
+                            pgrBar_frag_user_save.visibility = View.GONE
+                            Toast.makeText(activity!!.baseContext, R.string.update_cliente_success, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    true
+                }
+            })
+        }
         }
     }
 
@@ -184,9 +246,18 @@ class UserFragment : Fragment() {
 
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        try{
+            mListener = context as OnImageChanged
+        }catch(e: ClassCastException){
+            throw ClassCastException(context.toString() + "must implement OnNextArrowClickedListener")
+        }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == AuthFragment.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
+            pgrBar_frag_user_photo.visibility = View.VISIBLE
             async(UI){
                 val imageRotated: Deferred<Bitmap> = bg{
                     ImageFileHandler.bitmapFromFileRotation(File(imagePath))
@@ -199,6 +270,7 @@ class UserFragment : Fragment() {
     fun afterRotation(bitmap: Bitmap){
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, imgView_usu_frag_foto.width, imgView_usu_frag_foto.height, false)
         imgView_usu_frag_foto.setImageBitmap(scaledBitmap)
+        pgrBar_frag_user_photo.visibility = View.GONE
     }
 
     fun tomarFoto(context: Context){
@@ -211,6 +283,22 @@ class UserFragment : Fragment() {
         val filename = prefix + timestamp + "_"
         val storageDir = activity!!.getExternalFilesDir(directory)
         return File.createTempFile(filename, extension, storageDir)
+    }
+
+    fun blockUI(){
+        editText_usu_frag_mobile.isEnabled = false
+        editText_usu_frag_username.isEnabled = false
+        editText_usu_frag_email.isEnabled = false
+        editText_usu_frag_last.isEnabled = false
+        editText__usu_frag_name.isEnabled = false
+    }
+
+    fun enableUI(){
+        editText_usu_frag_mobile.isEnabled = true
+        editText_usu_frag_username.isEnabled = true
+        editText_usu_frag_email.isEnabled = true
+        editText_usu_frag_last.isEnabled = true
+        editText__usu_frag_name.isEnabled = true
     }
 
     fun tomarFotoIntent(file: File, context: Context){
